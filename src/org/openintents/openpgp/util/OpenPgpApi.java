@@ -141,6 +141,9 @@ public class OpenPgpApi {
     // optional extras:
     public static final String EXTRA_PASSPHRASE = "passphrase";
 
+    // internal
+    public static final String EXTRA_NFC_DATA = "nfc_data";
+
     // GET_KEY
     public static final String EXTRA_KEY_ID = "key_id";
     public static final String RESULT_KEY_IDS = "key_ids";
