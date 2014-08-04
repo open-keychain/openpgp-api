@@ -67,7 +67,7 @@ public class OpenPgpUtils {
     }
 
     private static String convertKeyIdToHex32bit(long keyId) {
-        String hexString = Long.toHexString(keyId & 0xffffffffL).toLowerCase(Locale.US);
+        String hexString = Long.toHexString(keyId & 0xffffffffL).toLowerCase(Locale.ENGLISH);
         while (hexString.length() < 8) {
             hexString = "0" + hexString;
         }
