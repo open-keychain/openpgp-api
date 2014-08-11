@@ -34,8 +34,21 @@ public class OpenPgpApi {
 
     public static final String TAG = "OpenPgp API";
 
-    public static final int API_VERSION = 3;
     public static final String SERVICE_INTENT = "org.openintents.openpgp.IOpenPgpService";
+
+    /**
+     * Version history
+     * ---------------
+     * <p/>
+     * 3:
+     * - first public stable version
+     * <p/>
+     * 4:
+     * - No changes to existing methods -> backward compatible
+     * - Introduction of ACTION_DECRYPT_METADATA, RESULT_METADATA, and OpenPgpDecryptMetadata parcel
+     * - Introduction of internal NFC extras: EXTRA_NFC_SIGNED_HASH, EXTRA_NFC_SIG_CREATION_TIMESTAMP
+     */
+    public static final int API_VERSION = 4;
 
     /**
      * General extras
@@ -54,7 +67,7 @@ public class OpenPgpApi {
      * Sign only
      * <p/>
      * optional extras:
-     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for ouput)
+     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * String        EXTRA_PASSPHRASE            (key passphrase)
      */
     public static final String ACTION_SIGN = "org.openintents.openpgp.action.SIGN";
@@ -68,7 +81,7 @@ public class OpenPgpApi {
      * long[]        EXTRA_KEY_IDS
      * <p/>
      * optional extras:
-     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for ouput)
+     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * String        EXTRA_PASSPHRASE            (key passphrase)
      */
     public static final String ACTION_ENCRYPT = "org.openintents.openpgp.action.ENCRYPT";
@@ -82,7 +95,7 @@ public class OpenPgpApi {
      * long[]        EXTRA_KEY_IDS
      * <p/>
      * optional extras:
-     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for ouput)
+     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * String        EXTRA_PASSPHRASE            (key passphrase)
      */
     public static final String ACTION_SIGN_AND_ENCRYPT = "org.openintents.openpgp.action.SIGN_AND_ENCRYPT";
@@ -95,12 +108,23 @@ public class OpenPgpApi {
      * in addition a PendingIntent is returned via RESULT_INTENT to download missing keys.
      * <p/>
      * optional extras:
-     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for ouput)
+     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * <p/>
      * returned extras:
      * OpenPgpSignatureResult   RESULT_SIGNATURE
+     * OpenPgpDecryptMetadata   RESULT_METADATA
      */
     public static final String ACTION_DECRYPT_VERIFY = "org.openintents.openpgp.action.DECRYPT_VERIFY";
+
+    /**
+     * Decrypts the header of an encrypted file to retrieve metadata such as original filename.
+     * <p/>
+     * This does not decrypt the actual content of the file.
+     * <p/>
+     * returned extras:
+     * OpenPgpDecryptMetadata   RESULT_METADATA
+     */
+    public static final String ACTION_DECRYPT_METADATA = "org.openintents.openpgp.action.DECRYPT_METADATA";
 
     /**
      * Get key ids based on given user ids (=emails)
@@ -165,6 +189,7 @@ public class OpenPgpApi {
 
     // DECRYPT_VERIFY
     public static final String RESULT_SIGNATURE = "signature";
+    public static final String RESULT_METADATA = "metadata";
 
     IOpenPgpService mService;
     Context mContext;
