@@ -45,7 +45,7 @@ public class OpenPgpApi {
      * <p/>
      * 4:
      * - No changes to existing methods -> backward compatible
-     * - Introduction of ACTION_DECRYPT_METADATA, RESULT_METADATA, and OpenPgpDecryptMetadata parcel
+     * - Introduction of ACTION_DECRYPT_METADATA, RESULT_METADATA, EXTRA_ORIGINAL_FILENAME, and OpenPgpMetadata parcel
      * - Introduction of internal NFC extras: EXTRA_NFC_SIGNED_HASH, EXTRA_NFC_SIG_CREATION_TIMESTAMP
      */
     public static final int API_VERSION = 4;
@@ -83,6 +83,7 @@ public class OpenPgpApi {
      * optional extras:
      * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * String        EXTRA_PASSPHRASE            (key passphrase)
+     * String        EXTRA_ORIGINAL_FILENAME     (original filename to be encrypted as metadata)
      */
     public static final String ACTION_ENCRYPT = "org.openintents.openpgp.action.ENCRYPT";
 
@@ -97,6 +98,7 @@ public class OpenPgpApi {
      * optional extras:
      * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * String        EXTRA_PASSPHRASE            (key passphrase)
+     * String        EXTRA_ORIGINAL_FILENAME     (original filename to be encrypted as metadata)
      */
     public static final String ACTION_SIGN_AND_ENCRYPT = "org.openintents.openpgp.action.SIGN_AND_ENCRYPT";
 
@@ -164,6 +166,7 @@ public class OpenPgpApi {
     public static final String EXTRA_KEY_IDS = "key_ids";
     // optional extras:
     public static final String EXTRA_PASSPHRASE = "passphrase";
+    public static final String EXTRA_ORIGINAL_FILENAME = "original_filename";
 
     // internal NFC states
     public static final String EXTRA_NFC_SIGNED_HASH = "nfc_signed_hash";
