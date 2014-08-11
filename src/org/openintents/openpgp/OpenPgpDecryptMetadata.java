@@ -32,12 +32,16 @@ public class OpenPgpDecryptMetadata implements Parcelable {
     public static final int PARCELABLE_VERSION = 1;
 
     String filename;
+    String mimeType;
     long modificationTime;
-    int format;
     long originalSize;
 
     public String getFilename() {
         return filename;
+    }
+
+    public String getMimeType() {
+        return mimeType;
     }
 
     public long getModificationTime() {
@@ -48,25 +52,21 @@ public class OpenPgpDecryptMetadata implements Parcelable {
         return originalSize;
     }
 
-    public int getFormat() {
-        return format;
-    }
-
     public OpenPgpDecryptMetadata() {
     }
 
-    public OpenPgpDecryptMetadata(String filename, long modificationTime,
-                                  int format, long originalSize) {
+    public OpenPgpDecryptMetadata(String filename, String mimeType, long modificationTime,
+                                  long originalSize) {
         this.filename = filename;
+        this.mimeType = mimeType;
         this.modificationTime = modificationTime;
-        this.format = format;
         this.originalSize = originalSize;
     }
 
     public OpenPgpDecryptMetadata(OpenPgpDecryptMetadata b) {
         this.filename = b.filename;
+        this.mimeType = b.mimeType;
         this.modificationTime = b.modificationTime;
-        this.format = b.format;
         this.originalSize = b.originalSize;
     }
 
@@ -87,8 +87,8 @@ public class OpenPgpDecryptMetadata implements Parcelable {
         int startPosition = dest.dataPosition();
         // version 1
         dest.writeString(filename);
+        dest.writeString(mimeType);
         dest.writeLong(modificationTime);
-        dest.writeInt(format);
         dest.writeLong(originalSize);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
@@ -105,8 +105,8 @@ public class OpenPgpDecryptMetadata implements Parcelable {
 
             OpenPgpDecryptMetadata vr = new OpenPgpDecryptMetadata();
             vr.filename = source.readString();
+            vr.mimeType = source.readString();
             vr.modificationTime = source.readLong();
-            vr.format = source.readInt();
             vr.originalSize = source.readLong();
 
             // skip over all fields added in future versions of this parcel
@@ -122,10 +122,9 @@ public class OpenPgpDecryptMetadata implements Parcelable {
 
     @Override
     public String toString() {
-        String out = new String();
-        out += "\nfilename: " + filename;
+        String out = "\nfilename: " + filename;
+        out += "\nmimeType: " + mimeType;
         out += "\nmodificationTime: " + modificationTime;
-        out += "\nformat: " + format;
         out += "\noriginalSize: " + originalSize;
         return out;
     }
