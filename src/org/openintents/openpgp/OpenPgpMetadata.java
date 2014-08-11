@@ -23,7 +23,7 @@ import android.os.Parcelable;
  * Parcelable versioning has been copied from Dashclock Widget
  * https://code.google.com/p/dashclock/source/browse/api/src/main/java/com/google/android/apps/dashclock/api/ExtensionData.java
  */
-public class OpenPgpDecryptMetadata implements Parcelable {
+public class OpenPgpMetadata implements Parcelable {
     /**
      * Since there might be a case where new versions of the client using the library getting
      * old versions of the protocol (and thus old versions of this class), we need a versioning
@@ -52,18 +52,18 @@ public class OpenPgpDecryptMetadata implements Parcelable {
         return originalSize;
     }
 
-    public OpenPgpDecryptMetadata() {
+    public OpenPgpMetadata() {
     }
 
-    public OpenPgpDecryptMetadata(String filename, String mimeType, long modificationTime,
-                                  long originalSize) {
+    public OpenPgpMetadata(String filename, String mimeType, long modificationTime,
+                           long originalSize) {
         this.filename = filename;
         this.mimeType = mimeType;
         this.modificationTime = modificationTime;
         this.originalSize = originalSize;
     }
 
-    public OpenPgpDecryptMetadata(OpenPgpDecryptMetadata b) {
+    public OpenPgpMetadata(OpenPgpMetadata b) {
         this.filename = b.filename;
         this.mimeType = b.mimeType;
         this.modificationTime = b.modificationTime;
@@ -97,13 +97,13 @@ public class OpenPgpDecryptMetadata implements Parcelable {
         dest.setDataPosition(startPosition + parcelableSize);
     }
 
-    public static final Creator<OpenPgpDecryptMetadata> CREATOR = new Creator<OpenPgpDecryptMetadata>() {
-        public OpenPgpDecryptMetadata createFromParcel(final Parcel source) {
+    public static final Creator<OpenPgpMetadata> CREATOR = new Creator<OpenPgpMetadata>() {
+        public OpenPgpMetadata createFromParcel(final Parcel source) {
             int parcelableVersion = source.readInt();
             int parcelableSize = source.readInt();
             int startPosition = source.dataPosition();
 
-            OpenPgpDecryptMetadata vr = new OpenPgpDecryptMetadata();
+            OpenPgpMetadata vr = new OpenPgpMetadata();
             vr.filename = source.readString();
             vr.mimeType = source.readString();
             vr.modificationTime = source.readLong();
@@ -115,8 +115,8 @@ public class OpenPgpDecryptMetadata implements Parcelable {
             return vr;
         }
 
-        public OpenPgpDecryptMetadata[] newArray(final int size) {
-            return new OpenPgpDecryptMetadata[size];
+        public OpenPgpMetadata[] newArray(final int size) {
+            return new OpenPgpMetadata[size];
         }
     };
 
