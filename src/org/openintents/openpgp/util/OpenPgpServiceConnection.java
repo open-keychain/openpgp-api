@@ -16,13 +16,13 @@
 
 package org.openintents.openpgp.util;
 
-import org.openintents.openpgp.IOpenPgpService;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+
+import org.openintents.openpgp.IOpenPgpService;
 
 public class OpenPgpServiceConnection {
 
@@ -99,8 +99,11 @@ public class OpenPgpServiceConnection {
                 Intent serviceIntent = new Intent(OpenPgpApi.SERVICE_INTENT);
                 // NOTE: setPackage is very important to restrict the intent to this provider only!
                 serviceIntent.setPackage(mProviderPackageName);
-                mApplicationContext.bindService(serviceIntent, mServiceConnection,
+                boolean connect = mApplicationContext.bindService(serviceIntent, mServiceConnection,
                         Context.BIND_AUTO_CREATE);
+                if (!connect) {
+                    throw new Exception("bindService() returned false!");
+                }
             } catch (Exception e) {
                 if (mOnBoundListener != null) {
                     mOnBoundListener.onError(e);
