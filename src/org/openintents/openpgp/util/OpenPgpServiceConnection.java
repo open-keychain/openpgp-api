@@ -26,9 +26,11 @@ import android.os.IBinder;
 
 public class OpenPgpServiceConnection {
 
-    // interface to create callbacks for onServiceConnected
+    // callback interface
     public interface OnBound {
         public void onBound(IOpenPgpService service);
+
+        public void onError(Exception e);
     }
 
     private Context mApplicationContext;
@@ -39,19 +41,19 @@ public class OpenPgpServiceConnection {
     private OnBound mOnBoundListener;
 
     /**
-     * Create new OpenPgpServiceConnection
+     * Create new connection
      *
      * @param context
      * @param providerPackageName specify package name of OpenPGP provider,
      *                            e.g., "org.sufficientlysecure.keychain"
      */
     public OpenPgpServiceConnection(Context context, String providerPackageName) {
-        this.mApplicationContext = context.getApplicationContext();
+        this.mApplicationContext = context;
         this.mProviderPackageName = providerPackageName;
     }
 
     /**
-     * Create new OpenPgpServiceConnection
+     * Create new connection with callback
      *
      * @param context
      * @param providerPackageName specify package name of OpenPGP provider,
@@ -60,8 +62,7 @@ public class OpenPgpServiceConnection {
      */
     public OpenPgpServiceConnection(Context context, String providerPackageName,
                                     OnBound onBoundListener) {
-        this.mApplicationContext = context.getApplicationContext();
-        this.mProviderPackageName = providerPackageName;
+        this(context, providerPackageName);
         this.mOnBoundListener = onBoundListener;
     }
 
@@ -91,23 +92,25 @@ public class OpenPgpServiceConnection {
      *
      * @return
      */
-    public boolean bindToService() {
+    public void bindToService() {
         // if not already bound...
         if (mService == null) {
             try {
-                Intent serviceIntent = new Intent();
-                serviceIntent.setAction(IOpenPgpService.class.getName());
+                Intent serviceIntent = new Intent(OpenPgpApi.SERVICE_INTENT);
                 // NOTE: setPackage is very important to restrict the intent to this provider only!
                 serviceIntent.setPackage(mProviderPackageName);
                 mApplicationContext.bindService(serviceIntent, mServiceConnection,
                         Context.BIND_AUTO_CREATE);
-
-                return true;
             } catch (Exception e) {
-                return false;
+                if (mOnBoundListener != null) {
+                    mOnBoundListener.onError(e);
+                }
             }
         } else {
-            return true;
+            // already bound, but also inform client about it with callback
+            if (mOnBoundListener != null) {
+                mOnBoundListener.onBound(mService);
+            }
         }
     }
 
