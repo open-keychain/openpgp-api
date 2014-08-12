@@ -48,7 +48,7 @@ public class OpenPgpServiceConnection {
      *                            e.g., "org.sufficientlysecure.keychain"
      */
     public OpenPgpServiceConnection(Context context, String providerPackageName) {
-        this.mApplicationContext = context;
+        this.mApplicationContext = context.getApplicationContext();
         this.mProviderPackageName = providerPackageName;
     }
 
