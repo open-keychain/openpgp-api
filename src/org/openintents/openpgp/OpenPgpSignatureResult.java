@@ -21,6 +21,7 @@ import android.os.Parcelable;
 
 import org.openintents.openpgp.util.OpenPgpUtils;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -33,7 +34,7 @@ public class OpenPgpSignatureResult implements Parcelable {
      * old versions of the protocol (and thus old versions of this class), we need a versioning
      * system for the parcels sent between the clients and the providers.
      */
-    public static final int PARCELABLE_VERSION = 1;
+    public static final int PARCELABLE_VERSION = 2;
 
     // generic error on signature verification
     public static final int SIGNATURE_ERROR = 0;
@@ -50,7 +51,8 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     int status;
     boolean signatureOnly;
-    String userId;
+    String primaryUserId;
+    ArrayList<String> userIds;
     long keyId;
 
     public int getStatus() {
@@ -69,12 +71,20 @@ public class OpenPgpSignatureResult implements Parcelable {
         this.signatureOnly = signatureOnly;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getPrimaryUserId() {
+        return primaryUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setPrimaryUserId(String primaryUserId) {
+        this.primaryUserId = primaryUserId;
+    }
+
+    public ArrayList<String> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(ArrayList<String> userIds) {
+        this.userIds = userIds;
     }
 
     public long getKeyId() {
@@ -90,18 +100,20 @@ public class OpenPgpSignatureResult implements Parcelable {
     }
 
     public OpenPgpSignatureResult(int signatureStatus, String signatureUserId,
-                                  boolean signatureOnly, long keyId) {
+                                  boolean signatureOnly, long keyId, ArrayList<String> userIds) {
         this.status = signatureStatus;
         this.signatureOnly = signatureOnly;
-        this.userId = signatureUserId;
+        this.primaryUserId = signatureUserId;
         this.keyId = keyId;
+        this.userIds = userIds;
     }
 
     public OpenPgpSignatureResult(OpenPgpSignatureResult b) {
         this.status = b.status;
-        this.userId = b.userId;
+        this.primaryUserId = b.primaryUserId;
         this.signatureOnly = b.signatureOnly;
         this.keyId = b.keyId;
+        this.userIds = b.userIds;
     }
 
     public int describeContents() {
@@ -122,8 +134,10 @@ public class OpenPgpSignatureResult implements Parcelable {
         // version 1
         dest.writeInt(status);
         dest.writeByte((byte) (signatureOnly ? 1 : 0));
-        dest.writeString(userId);
+        dest.writeString(primaryUserId);
         dest.writeLong(keyId);
+        // version 2
+        dest.writeList(userIds);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
         dest.setDataPosition(sizePosition);
@@ -140,8 +154,9 @@ public class OpenPgpSignatureResult implements Parcelable {
             OpenPgpSignatureResult vr = new OpenPgpSignatureResult();
             vr.status = source.readInt();
             vr.signatureOnly = source.readByte() == 1;
-            vr.userId = source.readString();
+            vr.primaryUserId = source.readString();
             vr.keyId = source.readLong();
+            source.readStringList(vr.userIds);
 
             // skip over all fields added in future versions of this parcel
             source.setDataPosition(startPosition + parcelableSize);
@@ -156,9 +171,9 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     @Override
     public String toString() {
-        String out = new String();
-        out += "\nstatus: " + status;
-        out += "\nuserId: " + userId;
+        String out = "\nstatus: " + status;
+        out += "\nprimaryUserId: " + primaryUserId;
+        out += "\nuserIds: " + userIds;
         out += "\nsignatureOnly: " + signatureOnly;
         out += "\nkeyId: " + OpenPgpUtils.convertKeyIdToHex(keyId);
         return out;
