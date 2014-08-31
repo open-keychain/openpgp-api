@@ -48,7 +48,8 @@ public class OpenPgpApi {
      * - Introduction of ACTION_DECRYPT_METADATA, RESULT_METADATA, EXTRA_ORIGINAL_FILENAME, and OpenPgpMetadata parcel
      * - Introduction of internal NFC extras: EXTRA_NFC_SIGNED_HASH, EXTRA_NFC_SIG_CREATION_TIMESTAMP
      * 5:
-     * - OpenPgpSignatureResult: new SIGNATURE_KEY_REVOKED and SIGNATURE_KEY_EXPIRED
+     * - OpenPgpSignatureResult: new consts SIGNATURE_KEY_REVOKED and SIGNATURE_KEY_EXPIRED
+     * - OpenPgpSignatureResult: ArrayList<String> userIds
      */
     public static final int API_VERSION = 5;
 
