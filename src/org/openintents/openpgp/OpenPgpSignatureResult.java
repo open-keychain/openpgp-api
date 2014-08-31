@@ -37,12 +37,16 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     // generic error on signature verification
     public static final int SIGNATURE_ERROR = 0;
-    // successfully verified signature, with certified public key
+    // successfully verified signature, with certified key
     public static final int SIGNATURE_SUCCESS_CERTIFIED = 1;
-    // no public key was found for this signature verification
-    public static final int SIGNATURE_UNKNOWN_PUB_KEY = 2;
-    // successfully verified signature, but with uncertified public key
+    // no key was found for this signature verification
+    public static final int SIGNATURE_KEY_MISSING = 2;
+    // successfully verified signature, but with uncertified key
     public static final int SIGNATURE_SUCCESS_UNCERTIFIED = 3;
+    // key has been revoked
+    public static final int SIGNATURE_KEY_REVOKED = 4;
+    // key is expired
+    public static final int SIGNATURE_KEY_EXPIRED = 5;
 
     int status;
     boolean signatureOnly;

@@ -47,8 +47,10 @@ public class OpenPgpApi {
      * - No changes to existing methods -> backward compatible
      * - Introduction of ACTION_DECRYPT_METADATA, RESULT_METADATA, EXTRA_ORIGINAL_FILENAME, and OpenPgpMetadata parcel
      * - Introduction of internal NFC extras: EXTRA_NFC_SIGNED_HASH, EXTRA_NFC_SIG_CREATION_TIMESTAMP
+     * 5:
+     * - OpenPgpSignatureResult: new SIGNATURE_KEY_REVOKED and SIGNATURE_KEY_EXPIRED
      */
-    public static final int API_VERSION = 4;
+    public static final int API_VERSION = 5;
 
     /**
      * General extras
@@ -106,7 +108,7 @@ public class OpenPgpApi {
      * Decrypts and verifies given input stream. This methods handles encrypted-only, signed-and-encrypted,
      * and also signed-only input.
      * <p/>
-     * If OpenPgpSignatureResult.getStatus() == OpenPgpSignatureResult.SIGNATURE_UNKNOWN_PUB_KEY
+     * If OpenPgpSignatureResult.getStatus() == OpenPgpSignatureResult.SIGNATURE_KEY_MISSING
      * in addition a PendingIntent is returned via RESULT_INTENT to download missing keys.
      * <p/>
      * optional extras:
