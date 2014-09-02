@@ -1,6 +1,6 @@
 # OpenPGP API library
 
-The OpenPGP API provides methods to execute OpenPGP operations, such as sign, encrypt, decrypt, verify, and more without user interaction from background threads. This is done by connecting your client application to a remote service provided by OpenKeychain or other OpenPGP providers.
+The OpenPGP API provides methods to execute OpenPGP operations, such as sign, encrypt, decrypt, verify, and more without user interaction from background threads. This is done by connecting your client application to a remote service provided by [OpenKeychain](http://www.openkeychain.org) or other OpenPGP providers.
 
 For usage instructions, please consult our Wiki page about the [OpenPGP API](https://github.com/open-keychain/open-keychain/wiki/OpenPGP-API).
 
