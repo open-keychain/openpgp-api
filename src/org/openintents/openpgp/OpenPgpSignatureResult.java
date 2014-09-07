@@ -137,7 +137,7 @@ public class OpenPgpSignatureResult implements Parcelable {
         dest.writeString(primaryUserId);
         dest.writeLong(keyId);
         // version 2
-        dest.writeList(userIds);
+        dest.writeStringList(userIds);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
         dest.setDataPosition(sizePosition);
