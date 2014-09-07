@@ -156,6 +156,7 @@ public class OpenPgpSignatureResult implements Parcelable {
             vr.signatureOnly = source.readByte() == 1;
             vr.primaryUserId = source.readString();
             vr.keyId = source.readLong();
+            vr.userIds = new ArrayList<String>();
             source.readStringList(vr.userIds);
 
             // skip over all fields added in future versions of this parcel
