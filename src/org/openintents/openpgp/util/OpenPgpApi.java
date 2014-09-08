@@ -174,6 +174,7 @@ public class OpenPgpApi {
     // internal NFC states
     public static final String EXTRA_NFC_SIGNED_HASH = "nfc_signed_hash";
     public static final String EXTRA_NFC_SIG_CREATION_TIMESTAMP = "nfc_sig_creation_timestamp";
+    public static final String EXTRA_NFC_DECRYPTED_SESSION_KEY = "nfc_decrypted_session_key";
 
     // GET_KEY
     public static final String EXTRA_KEY_ID = "key_id";
