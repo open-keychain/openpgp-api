@@ -90,8 +90,7 @@ public class OpenPgpApi {
 
     /**
      * Sign text or binary data resulting in a detached signature.
-     * OutputStream returns exactly the InputStream.
-     * No magic pre-processing is done like in ACTION_CLEARTEXT_SIGN.
+     * No OutputStream for ACTION_DETACHED_SIGN (No magic pre-processing like in ACTION_CLEARTEXT_SIGN)!
      * The detached signature is returned separately in RESULT_DETACHED_SIGNATURE.
      * <p/>
      * optional extras:
