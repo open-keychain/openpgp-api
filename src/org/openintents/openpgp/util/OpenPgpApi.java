@@ -67,13 +67,41 @@ public class OpenPgpApi {
      */
 
     /**
-     * Sign only
+     * DEPRECATED
+     * Same as ACTION_CLEARTEXT_SIGN
      * <p/>
      * optional extras:
-     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
+     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (DEPRECATED: this makes no sense here)
      * String        EXTRA_PASSPHRASE            (key passphrase)
      */
     public static final String ACTION_SIGN = "org.openintents.openpgp.action.SIGN";
+
+    /**
+     * Sign text resulting in a cleartext signature
+     * Some magic pre-processing of the text is done to convert it to a format usable for
+     * cleartext signatures per RFC 4880 before the text is actually signed:
+     * - end cleartext with newline
+     * - remove whitespaces on line endings
+     * <p/>
+     * optional extras:
+     * String        EXTRA_PASSPHRASE            (key passphrase)
+     */
+    public static final String ACTION_CLEARTEXT_SIGN = "org.openintents.openpgp.action.CLEARTEXT_SIGN";
+
+    /**
+     * Sign text or binary data resulting in a detached signature.
+     * OutputStream returns exactly the InputStream.
+     * No magic pre-processing is done like in ACTION_CLEARTEXT_SIGN.
+     * The detached signature is returned separately in RESULT_DETACHED_SIGNATURE.
+     * <p/>
+     * optional extras:
+     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for detached signature)
+     * String        EXTRA_PASSPHRASE            (key passphrase)
+     * <p/>
+     * returned extras:
+     * byte[]        RESULT_DETACHED_SIGNATURE
+     */
+    public static final String ACTION_DETACHED_SIGN = "org.openintents.openpgp.action.DETACHED_SIGN";
 
     /**
      * Encrypt
@@ -114,6 +142,7 @@ public class OpenPgpApi {
      * <p/>
      * optional extras:
      * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
+     * byte[]        EXTRA_DETACHED_SIGNATURE    (detached signature)
      * <p/>
      * returned extras:
      * OpenPgpSignatureResult   RESULT_SIGNATURE
@@ -159,10 +188,13 @@ public class OpenPgpApi {
 
     public static final String EXTRA_ACCOUNT_NAME = "account_name";
 
-    // SIGN, ENCRYPT, SIGN_AND_ENCRYPT, DECRYPT_VERIFY
+    // ACTION_DETACHED_SIGN, ENCRYPT, SIGN_AND_ENCRYPT, DECRYPT_VERIFY
     // request ASCII Armor for output
     // OpenPGP Radix-64, 33 percent overhead compared to binary, see http://tools.ietf.org/html/rfc4880#page-53)
     public static final String EXTRA_REQUEST_ASCII_ARMOR = "ascii_armor";
+
+    // ACTION_DETACHED_SIGN
+    public static final String RESULT_DETACHED_SIGNATURE = "detached_signature";
 
     // ENCRYPT, SIGN_AND_ENCRYPT
     public static final String EXTRA_USER_IDS = "user_ids";
@@ -195,6 +227,8 @@ public class OpenPgpApi {
     public static final String RESULT_INTENT = "intent";
 
     // DECRYPT_VERIFY
+    public static final String EXTRA_DETACHED_SIGNATURE = "detached_signature";
+
     public static final String RESULT_SIGNATURE = "signature";
     public static final String RESULT_METADATA = "metadata";
 
