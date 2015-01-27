@@ -147,7 +147,6 @@ public class OpenPgpApi {
      * in addition a PendingIntent is returned via RESULT_INTENT to download missing keys.
      * <p/>
      * optional extras:
-     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * byte[]        EXTRA_DETACHED_SIGNATURE    (detached signature)
      * <p/>
      * returned extras:
