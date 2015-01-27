@@ -230,6 +230,8 @@ public class OpenPgpApi {
 
     public static final String RESULT_SIGNATURE = "signature";
     public static final String RESULT_METADATA = "metadata";
+    // This will be the charset which was specified in the headers of ascii armored input, if any
+    public static final String RESULT_CHARSET = "charset";
 
     IOpenPgpService mService;
     Context mContext;
