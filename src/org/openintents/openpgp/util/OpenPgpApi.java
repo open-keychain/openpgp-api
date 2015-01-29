@@ -291,6 +291,14 @@ public class OpenPgpApi {
         }
     }
 
+    /**
+     * InputStream and OutputStreams are always closed after operating on them!
+     *
+     * @param data
+     * @param is
+     * @param os
+     * @return
+     */
     public Intent executeApi(Intent data, InputStream is, OutputStream os) {
         ParcelFileDescriptor input = null;
         ParcelFileDescriptor output = null;
@@ -349,7 +357,13 @@ public class OpenPgpApi {
                     Log.e(OpenPgpApi.TAG, "IOException when closing ParcelFileDescriptor!", e);
                 }
             }
-            // TODO: close input? Maybe the client wants to still use the input stream
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    Log.e(OpenPgpApi.TAG, "IOException when closing ParcelFileDescriptor!", e);
+                }
+            }
         }
     }
 
