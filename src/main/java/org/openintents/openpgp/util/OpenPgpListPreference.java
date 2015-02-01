@@ -60,6 +60,7 @@ public class OpenPgpListPreference extends DialogPreference {
 
     public OpenPgpListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        populateExistingProviderList();
     }
 
     public OpenPgpListPreference(Context context) {
@@ -79,55 +80,8 @@ public class OpenPgpListPreference extends DialogPreference {
 
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
-        mList.clear();
-        
-        // add "none"-entry
-        mList.add(0, new OpenPgpProviderEntry("",
-                getContext().getString(R.string.openpgp_list_preference_none),
-                getContext().getResources().getDrawable(R.drawable.ic_action_cancel_launchersize)));
-        
-        // add all additional (legacy) providers
-        mList.addAll(mLegacyList);
-        
-        // search for OpenPGP providers...
-        ArrayList<OpenPgpProviderEntry> providerList = new ArrayList<OpenPgpProviderEntry>();
-        Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT);
-        List<ResolveInfo> resInfo = getContext().getPackageManager().queryIntentServices(intent, 0);
-        if (!resInfo.isEmpty()) {
-            for (ResolveInfo resolveInfo : resInfo) {
-                if (resolveInfo.serviceInfo == null)
-                    continue;
 
-                String packageName = resolveInfo.serviceInfo.packageName;
-                String simpleName = String.valueOf(resolveInfo.serviceInfo.loadLabel(getContext()
-                        .getPackageManager()));
-                Drawable icon = resolveInfo.serviceInfo.loadIcon(getContext().getPackageManager());
-
-                if (!PROVIDER_BLACKLIST.contains(packageName)) {
-                    providerList.add(new OpenPgpProviderEntry(packageName, simpleName, icon));
-                }
-            }
-        }
-
-        if (providerList.isEmpty()) {
-            // add install links if provider list is empty
-            resInfo = getContext().getPackageManager().queryIntentActivities
-                    (MARKET_INTENT, 0);
-            for (ResolveInfo resolveInfo : resInfo) {
-                Intent marketIntent = new Intent(MARKET_INTENT);
-                marketIntent.setPackage(resolveInfo.activityInfo.packageName);
-                Drawable icon = resolveInfo.activityInfo.loadIcon(getContext().getPackageManager());
-                String marketName = String.valueOf(resolveInfo.activityInfo.applicationInfo
-                        .loadLabel(getContext().getPackageManager()));
-                String simpleName = String.format(getContext().getString(R.string
-                        .openpgp_install_openkeychain_via), marketName);
-                mList.add(new OpenPgpProviderEntry(OPENKEYCHAIN_PACKAGE, simpleName,
-                        icon, marketIntent));
-            }
-        } else {
-            // add provider
-            mList.addAll(providerList);
-        }
+        populateExistingProviderList();
 
         // Init ArrayAdapter with OpenPGP Providers
         ListAdapter adapter = new ArrayAdapter<OpenPgpProviderEntry>(getContext(),
@@ -239,6 +193,59 @@ public class OpenPgpListPreference extends DialogPreference {
         }
 
         return null;
+    }
+
+    private void populateExistingProviderList()
+    {
+        mList.clear();
+
+        // add "none"-entry
+        mList.add(0, new OpenPgpProviderEntry("",
+                getContext().getString(R.string.openpgp_list_preference_none),
+                getContext().getResources().getDrawable(R.drawable.ic_action_cancel_launchersize)));
+
+        // add all additional (legacy) providers
+        mList.addAll(mLegacyList);
+
+        // search for OpenPGP providers...
+        ArrayList<OpenPgpProviderEntry> providerList = new ArrayList<OpenPgpProviderEntry>();
+        Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT);
+        List<ResolveInfo> resInfo = getContext().getPackageManager().queryIntentServices(intent, 0);
+        if (!resInfo.isEmpty()) {
+            for (ResolveInfo resolveInfo : resInfo) {
+                if (resolveInfo.serviceInfo == null)
+                    continue;
+
+                String packageName = resolveInfo.serviceInfo.packageName;
+                String simpleName = String.valueOf(resolveInfo.serviceInfo.loadLabel(getContext()
+                        .getPackageManager()));
+                Drawable icon = resolveInfo.serviceInfo.loadIcon(getContext().getPackageManager());
+
+                if (!PROVIDER_BLACKLIST.contains(packageName)) {
+                    providerList.add(new OpenPgpProviderEntry(packageName, simpleName, icon));
+                }
+            }
+        }
+
+        if (providerList.isEmpty()) {
+            // add install links if provider list is empty
+            resInfo = getContext().getPackageManager().queryIntentActivities
+                    (MARKET_INTENT, 0);
+            for (ResolveInfo resolveInfo : resInfo) {
+                Intent marketIntent = new Intent(MARKET_INTENT);
+                marketIntent.setPackage(resolveInfo.activityInfo.packageName);
+                Drawable icon = resolveInfo.activityInfo.loadIcon(getContext().getPackageManager());
+                String marketName = String.valueOf(resolveInfo.activityInfo.applicationInfo
+                        .loadLabel(getContext().getPackageManager()));
+                String simpleName = String.format(getContext().getString(R.string
+                        .openpgp_install_openkeychain_via), marketName);
+                mList.add(new OpenPgpProviderEntry(OPENKEYCHAIN_PACKAGE, simpleName,
+                        icon, marketIntent));
+            }
+        } else {
+            // add provider
+            mList.addAll(providerList);
+        }
     }
 
     private static class OpenPgpProviderEntry {
