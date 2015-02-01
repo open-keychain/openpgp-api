@@ -187,7 +187,7 @@ public class OpenPgpListPreference extends DialogPreference {
 
     public String getEntryByValue(String packageName) {
         for (OpenPgpProviderEntry app : mList) {
-            if (app.packageName.equals(packageName)) {
+            if (app.packageName.equals(packageName) && app.intent == null) {
                 return app.simpleName;
             }
         }
