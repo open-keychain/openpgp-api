@@ -1,22 +1,39 @@
-// please leave this here, so this library builds on its own
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.novoda:bintray-release:0.2.7'
     }
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
 
 android {
     compileSdkVersion 21
     buildToolsVersion '21.1.2'
     
+    defaultConfig {
+        versionCode 1
+        versionName '6.0' // API-Version . minor
+        minSdkVersion 9
+        targetSdkVersion 21
+    }
+    
     // Do not abort build if lint finds errors
     lintOptions {
         abortOnError false
     }
+}
+
+publish {
+    userOrg = 'dschuermann'
+    groupId = 'org.openintents.openpgp'
+    artifactId = 'openpgp-api'
+    version = '6.0'
+    description = 'The OpenPGP API provides methods to execute OpenPGP operations, such as sign, encrypt, decrypt, verify, and more without user interaction from background threads'
+    website = 'http://www.openkeychain.org/'
 }
