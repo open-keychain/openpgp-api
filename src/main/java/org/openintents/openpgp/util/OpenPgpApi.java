@@ -280,8 +280,8 @@ public class OpenPgpApi {
 
     public static final String RESULT_TYPE = "type";
     public static final int RESULT_TYPE_UNENCRYPTED_UNSIGNED = 0;
-    public static final int RESULT_TYPE_ENCRYPTED = 8;
-    public static final int RESULT_TYPE_SIGNED = 16;
+    public static final int RESULT_TYPE_ENCRYPTED = 1;
+    public static final int RESULT_TYPE_SIGNED = 2;
 
     IOpenPgpService mService;
     Context mContext;
