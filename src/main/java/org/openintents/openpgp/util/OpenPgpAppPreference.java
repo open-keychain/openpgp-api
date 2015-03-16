@@ -162,6 +162,12 @@ public class OpenPgpAppPreference extends DialogPreference {
             return;
         }
 
+        setAndPersist(mSelectedPackage);
+    }
+
+    private void setAndPersist(String packageName) {
+        mSelectedPackage = packageName;
+
         // Save to persistent storage (this method will make sure this
         // preference should be persistent, along with other useful checks)
         persistString(mSelectedPackage);
@@ -172,6 +178,7 @@ public class OpenPgpAppPreference extends DialogPreference {
         // also update summary with selected provider
         setSummary(getEntry());
     }
+
 
     private int getIndexOfProviderList(String packageName) {
         for (OpenPgpProviderEntry app : mList) {
@@ -191,6 +198,10 @@ public class OpenPgpAppPreference extends DialogPreference {
         return mSelectedPackage;
     }
 
+    public void setValue(String packageName) {
+        setAndPersist(mSelectedPackage);
+    }
+
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getString(index);
@@ -206,9 +217,7 @@ public class OpenPgpAppPreference extends DialogPreference {
         } else {
             // Set state
             String value = (String) defaultValue;
-            mSelectedPackage = value;
-            persistString(value);
-            setSummary(getEntry());
+            setAndPersist(value);
         }
     }
 

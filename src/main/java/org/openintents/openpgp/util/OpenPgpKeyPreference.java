@@ -142,6 +142,10 @@ public class OpenPgpKeyPreference extends Preference {
             return;
         }
 
+        setAndPersist(newValue);
+    }
+
+    private void setAndPersist(long newValue) {
         mKeyId = newValue;
 
         // Save to persistent storage (this method will make sure this
@@ -167,8 +171,7 @@ public class OpenPgpKeyPreference extends Preference {
         } else {
             // Set state
             long value = (Long) defaultValue;
-            mKeyId = value;
-            persistLong(value);
+            setAndPersist(value);
         }
     }
 
