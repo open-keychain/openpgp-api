@@ -25,6 +25,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.DialogPreference;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -176,9 +177,18 @@ public class OpenPgpAppPreference extends DialogPreference {
         notifyChanged();
 
         // also update summary with selected provider
-        setSummary(getEntry());
+        updateSummary(mSelectedPackage);
     }
 
+    private void updateSummary(String packageName) {
+        String summary = getEntryByValue(packageName);
+        setSummary(summary);
+    }
+
+    @Override
+    public CharSequence getSummary() {
+        return getEntryByValue(mSelectedPackage);
+    }
 
     private int getIndexOfProviderList(String packageName) {
         for (OpenPgpProviderEntry app : mList) {
@@ -187,7 +197,8 @@ public class OpenPgpAppPreference extends DialogPreference {
             }
         }
 
-        return -1;
+        // default is "none"
+        return 0;
     }
 
     public String getEntry() {
@@ -199,7 +210,7 @@ public class OpenPgpAppPreference extends DialogPreference {
     }
 
     public void setValue(String packageName) {
-        setAndPersist(mSelectedPackage);
+        setAndPersist(packageName);
     }
 
     @Override
@@ -211,13 +222,12 @@ public class OpenPgpAppPreference extends DialogPreference {
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         if (restoreValue) {
             // Restore state
-            Log.d(OpenPgpApi.TAG, "restore: mSelectedPackage " + mSelectedPackage);
             mSelectedPackage = getPersistedString(mSelectedPackage);
-            setSummary(getEntry());
+            updateSummary(mSelectedPackage);
         } else {
-            // Set state
             String value = (String) defaultValue;
             setAndPersist(value);
+            updateSummary(value);
         }
     }
 
@@ -228,7 +238,7 @@ public class OpenPgpAppPreference extends DialogPreference {
             }
         }
 
-        return null;
+        return getContext().getString(R.string.openpgp_list_preference_none);
     }
 
     private void populateAppList() {
