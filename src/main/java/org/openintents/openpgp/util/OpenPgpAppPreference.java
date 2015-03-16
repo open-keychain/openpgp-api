@@ -26,11 +26,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+
 import org.openintents.openpgp.R;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ import java.util.List;
  * Does not extend ListPreference, but is very similar to it!
  * http://grepcode.com/file_/repository.grepcode.com/java/ext/com.google.android/android/4.4_r1/android/preference/ListPreference.java/?v=source
  */
-public class OpenPgpListPreference extends DialogPreference {
+public class OpenPgpAppPreference extends DialogPreference {
     private static final String OPENKEYCHAIN_PACKAGE = "org.sufficientlysecure.keychain";
     private static final String MARKET_INTENT_URI_BASE = "market://details?id=%s";
     private static final Intent MARKET_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(
@@ -53,17 +55,17 @@ public class OpenPgpListPreference extends DialogPreference {
         PROVIDER_BLACKLIST.add("org.thialfihar.android.apg");
     }
 
-    private ArrayList<OpenPgpProviderEntry> mLegacyList = new ArrayList<OpenPgpProviderEntry>();
-    private ArrayList<OpenPgpProviderEntry> mList = new ArrayList<OpenPgpProviderEntry>();
+    private ArrayList<OpenPgpProviderEntry> mLegacyList = new ArrayList<>();
+    private ArrayList<OpenPgpProviderEntry> mList = new ArrayList<>();
 
     private String mSelectedPackage;
 
-    public OpenPgpListPreference(Context context, AttributeSet attrs) {
+    public OpenPgpAppPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        populateExistingProviderList();
+        populateAppList();
     }
 
-    public OpenPgpListPreference(Context context) {
+    public OpenPgpAppPreference(Context context) {
         this(context, null);
     }
 
@@ -81,7 +83,8 @@ public class OpenPgpListPreference extends DialogPreference {
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
 
-        populateExistingProviderList();
+        // do again, maybe an app has now been installed
+        populateAppList();
 
         // Init ArrayAdapter with OpenPGP Providers
         ListAdapter adapter = new ArrayAdapter<OpenPgpProviderEntry>(getContext(),
@@ -103,7 +106,7 @@ public class OpenPgpListPreference extends DialogPreference {
             }
         };
 
-        builder.setSingleChoiceItems(adapter, getIndexOfProviderList(getValue()),
+        builder.setSingleChoiceItems(adapter, getIndexOfProviderList(mSelectedPackage),
                 new DialogInterface.OnClickListener() {
 
                     @Override
@@ -121,6 +124,7 @@ public class OpenPgpListPreference extends DialogPreference {
                              * as the user might remove the currently used OpenPGP app.
                              */
                             getContext().startActivity(entry.intent);
+                            return;
                         }
 
                         mSelectedPackage = entry.packageName;
@@ -129,7 +133,7 @@ public class OpenPgpListPreference extends DialogPreference {
                          * Clicking on an item simulates the positive button click, and dismisses
                          * the dialog.
                          */
-                        OpenPgpListPreference.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+                        OpenPgpAppPreference.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
                         dialog.dismiss();
                     }
                 });
@@ -146,10 +150,27 @@ public class OpenPgpListPreference extends DialogPreference {
         super.onDialogClosed(positiveResult);
 
         if (positiveResult && (mSelectedPackage != null)) {
-            if (callChangeListener(mSelectedPackage)) {
-                setValue(mSelectedPackage);
-            }
+            save();
         }
+    }
+
+    private void save() {
+        // Give the client a chance to ignore this change if they deem it
+        // invalid
+        if (!callChangeListener(mSelectedPackage)) {
+            // They don't want the value to be set
+            return;
+        }
+
+        // Save to persistent storage (this method will make sure this
+        // preference should be persistent, along with other useful checks)
+        persistString(mSelectedPackage);
+
+        // Data has changed, notify so UI can be refreshed!
+        notifyChanged();
+
+        // also update summary with selected provider
+        setSummary(getEntry());
     }
 
     private int getIndexOfProviderList(String packageName) {
@@ -162,17 +183,12 @@ public class OpenPgpListPreference extends DialogPreference {
         return -1;
     }
 
-    public void setValue(String packageName) {
-        mSelectedPackage = packageName;
-        persistString(packageName);
+    public String getEntry() {
+        return getEntryByValue(mSelectedPackage);
     }
 
     public String getValue() {
         return mSelectedPackage;
-    }
-
-    public String getEntry() {
-        return getEntryByValue(mSelectedPackage);
     }
 
     @Override
@@ -182,7 +198,18 @@ public class OpenPgpListPreference extends DialogPreference {
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setValue(restoreValue ? getPersistedString(mSelectedPackage) : (String) defaultValue);
+        if (restoreValue) {
+            // Restore state
+            Log.d(OpenPgpApi.TAG, "restore: mSelectedPackage " + mSelectedPackage);
+            mSelectedPackage = getPersistedString(mSelectedPackage);
+            setSummary(getEntry());
+        } else {
+            // Set state
+            String value = (String) defaultValue;
+            mSelectedPackage = value;
+            persistString(value);
+            setSummary(getEntry());
+        }
     }
 
     public String getEntryByValue(String packageName) {
@@ -195,8 +222,7 @@ public class OpenPgpListPreference extends DialogPreference {
         return null;
     }
 
-    private void populateExistingProviderList()
-    {
+    private void populateAppList() {
         mList.clear();
 
         // add "none"-entry
@@ -208,7 +234,7 @@ public class OpenPgpListPreference extends DialogPreference {
         mList.addAll(mLegacyList);
 
         // search for OpenPGP providers...
-        ArrayList<OpenPgpProviderEntry> providerList = new ArrayList<OpenPgpProviderEntry>();
+        ArrayList<OpenPgpProviderEntry> providerList = new ArrayList<>();
         Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT);
         List<ResolveInfo> resInfo = getContext().getPackageManager().queryIntentServices(intent, 0);
         if (!resInfo.isEmpty()) {
