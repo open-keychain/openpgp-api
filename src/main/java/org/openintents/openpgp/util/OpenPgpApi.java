@@ -246,10 +246,8 @@ public class OpenPgpApi {
     public static final String EXTRA_ORIGINAL_FILENAME = "original_filename";
     public static final String EXTRA_ENABLE_COMPRESSION = "enable_compression";
 
-    // internal NFC states
-    public static final String EXTRA_NFC_SIGNED_HASH = "nfc_signed_hash";
-    public static final String EXTRA_NFC_SIG_CREATION_TIMESTAMP = "nfc_sig_creation_timestamp";
-    public static final String EXTRA_NFC_DECRYPTED_SESSION_KEY = "nfc_decrypted_session_key";
+    // crypto input states (internal!)
+    public static final String EXTRA_CRYPTO_INPUT = "crypto_input";
 
     // GET_SIGN_KEY_ID
     public static final String EXTRA_USER_ID = "user_id";
