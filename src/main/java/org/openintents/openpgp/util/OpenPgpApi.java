@@ -246,9 +246,6 @@ public class OpenPgpApi {
     public static final String EXTRA_ORIGINAL_FILENAME = "original_filename";
     public static final String EXTRA_ENABLE_COMPRESSION = "enable_compression";
 
-    // crypto input states (internal!)
-    public static final String EXTRA_CRYPTO_INPUT = "crypto_input";
-
     // GET_SIGN_KEY_ID
     public static final String EXTRA_USER_ID = "user_id";
 
@@ -281,6 +278,10 @@ public class OpenPgpApi {
     public static final int RESULT_TYPE_UNENCRYPTED_UNSIGNED = 0;
     public static final int RESULT_TYPE_ENCRYPTED = 1;
     public static final int RESULT_TYPE_SIGNED = 2;
+
+    // INTERNAL, should not be used
+    public static final String EXTRA_CALL_UUID1 = "call_uuid1";
+    public static final String EXTRA_CALL_UUID2 = "call_uuid2";
 
     IOpenPgpService mService;
     Context mContext;
