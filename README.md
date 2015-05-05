@@ -4,6 +4,21 @@ The OpenPGP API provides methods to execute OpenPGP operations, such as sign, en
 
 For usage instructions, please consult our Wiki page about the [OpenPGP API](https://github.com/open-keychain/open-keychain/wiki/OpenPGP-API).
 
+## How to import
+
+Add this to your build.gradle:
+
+```
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.sufficientlysecure:openpgp-api:7.0'
+}
+```
+
+
 License
 =======
 

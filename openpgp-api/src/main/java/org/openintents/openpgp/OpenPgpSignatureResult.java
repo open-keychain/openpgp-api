@@ -22,7 +22,6 @@ import android.os.Parcelable;
 import org.openintents.openpgp.util.OpenPgpUtils;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Parcelable versioning has been copied from Dashclock Widget
