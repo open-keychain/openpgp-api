@@ -19,7 +19,7 @@ Thus, you are allowed to also use it in closed source applications as long as yo
     limitations under the License.
 
 ## Complete example
-A complete working example is available in the [example project](https://github.com/open-keychain/openpgp-api/blob/master/example). The [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/example/OpenPgpApiActivity.java) contains most relevant sourcecode.
+A complete working example is available in the [example project](https://github.com/open-keychain/openpgp-api/blob/master/example). The [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/openpgp/example/OpenPgpApiActivity.java) contains most relevant sourcecode.
 
 ## 1. Add the API library to your project
 
@@ -42,7 +42,7 @@ We will go through the basic steps to understand how this API works, following t
 ![](https://github.com/open-keychain/open-keychain/raw/master/Resources/docs/openpgp_api_1.jpg)
 
 In this diagram the client app is depicted on the left side, the OpenPGP provider (in this case OpenKeychain) is depicted on the right.
-The remote service is defined via the [AIDL](http://developer.android.com/guide/components/aidl.html) file [``IOpenPgpService``](https://github.com/open-keychain/openpgp-api/blob/master/openpgp-api/src/main/java/org/openintents/openpgp/IOpenPgpService.aidl).
+The remote service is defined via the [AIDL](http://developer.android.com/guide/components/aidl.html) file [``IOpenPgpService``](https://github.com/open-keychain/openpgp-api/blob/master/openpgp-api/src/main/aidl/org/openintents/openpgp/IOpenPgpService.aidl).
 It contains only one exposed method which can be invoked remotely:
 ```java
 interface IOpenPgpService {
@@ -155,12 +155,12 @@ Intent result = api.executeApi(data, is, os);
 
 ## 3. Tipps
 *   ``api.executeApi(data, is, os);`` is a blocking call. If you want a convenient asynchronous call, use ``api.executeApiAsync(data, is, os, new MyCallback([... ]));``, where ``MyCallback`` is an private class implementing ``OpenPgpApi.IOpenPgpCallback``.
-    See [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/example/OpenPgpApiActivity.java) for an example.
+    See [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/openpgp/example/OpenPgpApiActivity.java) for an example.
 *   Using
 
     ```java
     mServiceConnection = new OpenPgpServiceConnection(this, "org.sufficientlysecure.keychain");
     ```
     connects to OpenKeychain directly.
-    If you want to let the user choose between OpenPGP providers, you can implement the [``OpenPgpAppPreference.java``](https://github.com/open-keychain/openpgp-api-lib/blob/master/src/main/java/org/openintents/openpgp/util/OpenPgpAppPreference.java) like done in the example app.
+    If you want to let the user choose between OpenPGP providers, you can implement the [``OpenPgpAppPreference.java``](https://github.com/open-keychain/openpgp-api/tree/master/openpgp-api/src/main/java/org/openintents/openpgp/util/OpenPgpAppPreference.java) like done in the example app.
 
