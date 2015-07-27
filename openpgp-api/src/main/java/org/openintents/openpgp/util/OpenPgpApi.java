@@ -67,6 +67,7 @@ public class OpenPgpApi {
      * - EXTRA_PASSPHRASE changed from String to char[]
      * 8:
      * - OpenPgpSignatureResult: new const INSECURE_CRYPTOGRAPHY
+     * - RESULT_TYPES important change: Introduce RESULT_TYPE_SIGNED_AND_ENCRYPTED, remove RESULT_TYPE_UNENCRYPTED_UNSIGNED
      */
     public static final int API_VERSION = 8;
 
@@ -276,10 +277,11 @@ public class OpenPgpApi {
     // This will be the charset which was specified in the headers of ascii armored input, if any
     public static final String RESULT_CHARSET = "charset";
 
+    // unencrypted _and_ unsigned content will return an ERROR as there is no OpenPGP data available
     public static final String RESULT_TYPE = "type";
-    public static final int RESULT_TYPE_UNENCRYPTED_UNSIGNED = 0;
     public static final int RESULT_TYPE_ENCRYPTED = 1;
     public static final int RESULT_TYPE_SIGNED = 2;
+    public static final int RESULT_TYPE_SIGNED_AND_ENCRYPTED = 3;
 
     // INTERNAL, should not be used
     public static final String EXTRA_CALL_UUID1 = "call_uuid1";
@@ -336,11 +338,6 @@ public class OpenPgpApi {
 
     /**
      * InputStream and OutputStreams are always closed after operating on them!
-     *
-     * @param data
-     * @param is
-     * @param os
-     * @return
      */
     public Intent executeApi(Intent data, InputStream is, OutputStream os) {
         ParcelFileDescriptor input = null;
