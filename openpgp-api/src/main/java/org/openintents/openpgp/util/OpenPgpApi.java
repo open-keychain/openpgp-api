@@ -65,8 +65,10 @@ public class OpenPgpApi {
      * - New result for ACTION_DECRYPT_VERIFY: RESULT_TYPE
      * - New ACTION_GET_SIGN_KEY_ID
      * - EXTRA_PASSPHRASE changed from String to char[]
+     * 8:
+     * - OpenPgpSignatureResult: new const INSECURE_CRYPTOGRAPHY
      */
-    public static final int API_VERSION = 7;
+    public static final int API_VERSION = 8;
 
     /**
      * General extras
