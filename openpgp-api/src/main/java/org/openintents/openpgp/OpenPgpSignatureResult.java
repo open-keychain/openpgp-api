@@ -23,10 +23,6 @@ import org.openintents.openpgp.util.OpenPgpUtils;
 
 import java.util.ArrayList;
 
-/**
- * Parcelable versioning has been copied from Dashclock Widget
- * https://code.google.com/p/dashclock/source/browse/api/src/main/java/com/google/android/apps/dashclock/api/ExtensionData.java
- */
 public class OpenPgpSignatureResult implements Parcelable {
     /**
      * Since there might be a case where new versions of the client using the library getting
@@ -35,37 +31,47 @@ public class OpenPgpSignatureResult implements Parcelable {
      */
     public static final int PARCELABLE_VERSION = 2;
 
-    // generic error on signature verification
-    public static final int SIGNATURE_ERROR = 0;
-    // successfully verified signature, with certified key
-    public static final int SIGNATURE_SUCCESS_CERTIFIED = 1;
+    // content not signed
+    public static final int RESULT_NO_SIGNATURE = -1;
+    // invalid signature!
+    public static final int RESULT_INVALID_SIGNATURE = 0;
+    // successfully verified signature, with confirmed key
+    public static final int RESULT_VALID_CONFIRMED = 1;
     // no key was found for this signature verification
-    public static final int SIGNATURE_KEY_MISSING = 2;
-    // successfully verified signature, but with uncertified key
-    public static final int SIGNATURE_SUCCESS_UNCERTIFIED = 3;
-    // key has been revoked
-    public static final int SIGNATURE_KEY_REVOKED = 4;
-    // key is expired
-    public static final int SIGNATURE_KEY_EXPIRED = 5;
+    public static final int RESULT_KEY_MISSING = 2;
+    // successfully verified signature, but with unconfirmed key
+    public static final int RESULT_VALID_UNCONFIRMED = 3;
+    // key has been revoked -> invalid signature!
+    public static final int RESULT_INVALID_KEY_REVOKED = 4;
+    // key is expired -> invalid signature!
+    public static final int RESULT_INVALID_KEY_EXPIRED = 5;
+    // insecure cryptographic algorithms/protocol -> invalid signature!
+    public static final int RESULT_INVALID_INSECURE = 6;
 
-    int status;
+    int result;
     boolean signatureOnly;
     String primaryUserId;
     ArrayList<String> userIds;
     long keyId;
 
-    public int getStatus() {
-        return status;
+    public int getResult() {
+        return result;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setResult(int result) {
+        this.result = result;
     }
 
+    /**
+     * @deprecated
+     */
     public boolean isSignatureOnly() {
         return signatureOnly;
     }
 
+    /**
+     * @deprecated
+     */
     public void setSignatureOnly(boolean signatureOnly) {
         this.signatureOnly = signatureOnly;
     }
@@ -100,7 +106,7 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     public OpenPgpSignatureResult(int signatureStatus, String signatureUserId,
                                   boolean signatureOnly, long keyId, ArrayList<String> userIds) {
-        this.status = signatureStatus;
+        this.result = signatureStatus;
         this.signatureOnly = signatureOnly;
         this.primaryUserId = signatureUserId;
         this.keyId = keyId;
@@ -108,7 +114,7 @@ public class OpenPgpSignatureResult implements Parcelable {
     }
 
     public OpenPgpSignatureResult(OpenPgpSignatureResult b) {
-        this.status = b.status;
+        this.result = b.result;
         this.primaryUserId = b.primaryUserId;
         this.signatureOnly = b.signatureOnly;
         this.keyId = b.keyId;
@@ -131,7 +137,7 @@ public class OpenPgpSignatureResult implements Parcelable {
         dest.writeInt(0);
         int startPosition = dest.dataPosition();
         // version 1
-        dest.writeInt(status);
+        dest.writeInt(result);
         dest.writeByte((byte) (signatureOnly ? 1 : 0));
         dest.writeString(primaryUserId);
         dest.writeLong(keyId);
@@ -146,12 +152,12 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     public static final Creator<OpenPgpSignatureResult> CREATOR = new Creator<OpenPgpSignatureResult>() {
         public OpenPgpSignatureResult createFromParcel(final Parcel source) {
-            int parcelableVersion = source.readInt();
+            source.readInt(); // parcelableVersion
             int parcelableSize = source.readInt();
             int startPosition = source.dataPosition();
 
             OpenPgpSignatureResult vr = new OpenPgpSignatureResult();
-            vr.status = source.readInt();
+            vr.result = source.readInt();
             vr.signatureOnly = source.readByte() == 1;
             vr.primaryUserId = source.readString();
             vr.keyId = source.readLong();
@@ -171,7 +177,7 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     @Override
     public String toString() {
-        String out = "\nstatus: " + status;
+        String out = "\nresult: " + result;
         out += "\nprimaryUserId: " + primaryUserId;
         out += "\nuserIds: " + userIds;
         out += "\nsignatureOnly: " + signatureOnly;

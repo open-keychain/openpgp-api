@@ -19,10 +19,6 @@ package org.openintents.openpgp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Parcelable versioning has been copied from Dashclock Widget
- * https://code.google.com/p/dashclock/source/browse/api/src/main/java/com/google/android/apps/dashclock/api/ExtensionData.java
- */
 public class OpenPgpMetadata implements Parcelable {
     /**
      * Since there might be a case where new versions of the client using the library getting
@@ -99,7 +95,7 @@ public class OpenPgpMetadata implements Parcelable {
 
     public static final Creator<OpenPgpMetadata> CREATOR = new Creator<OpenPgpMetadata>() {
         public OpenPgpMetadata createFromParcel(final Parcel source) {
-            int parcelableVersion = source.readInt();
+            source.readInt(); // parcelableVersion
             int parcelableSize = source.readInt();
             int startPosition = source.dataPosition();
 

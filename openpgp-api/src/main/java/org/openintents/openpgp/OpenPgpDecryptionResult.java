@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2015 Dominik Schürmann <dominik@dominikschuermann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.openintents.openpgp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class OpenPgpError implements Parcelable {
+public class OpenPgpDecryptionResult implements Parcelable {
     /**
      * Since there might be a case where new versions of the client using the library getting
      * old versions of the protocol (and thus old versions of this class), we need a versioning
@@ -27,43 +27,33 @@ public class OpenPgpError implements Parcelable {
      */
     public static final int PARCELABLE_VERSION = 1;
 
-    // possible values for errorId
-    public static final int CLIENT_SIDE_ERROR = -1;
-    public static final int GENERIC_ERROR = 0;
-    public static final int INCOMPATIBLE_API_VERSIONS = 1;
-    public static final int NO_OR_WRONG_PASSPHRASE = 2;
-    public static final int NO_USER_IDS = 3;
+    // content not encrypted
+    public static final int RESULT_NOT_ENCRYPTED = -1;
+    // insecure!
+    public static final int RESULT_INSECURE = 0;
+    // encrypted
+    public static final int RESULT_ENCRYPTED = 1;
 
-    int errorId;
-    String message;
+    int result;
 
-    public OpenPgpError() {
+    public int getResult() {
+        return result;
     }
 
-    public OpenPgpError(int errorId, String message) {
-        this.errorId = errorId;
-        this.message = message;
+    public void setResult(int result) {
+        this.result = result;
     }
 
-    public OpenPgpError(OpenPgpError b) {
-        this.errorId = b.errorId;
-        this.message = b.message;
+    public OpenPgpDecryptionResult() {
+
     }
 
-    public int getErrorId() {
-        return errorId;
+    public OpenPgpDecryptionResult(int result) {
+        this.result = result;
     }
 
-    public void setErrorId(int errorId) {
-        this.errorId = errorId;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public OpenPgpDecryptionResult(OpenPgpDecryptionResult b) {
+        this.result = b.result;
     }
 
     public int describeContents() {
@@ -82,8 +72,7 @@ public class OpenPgpError implements Parcelable {
         dest.writeInt(0);
         int startPosition = dest.dataPosition();
         // version 1
-        dest.writeInt(errorId);
-        dest.writeString(message);
+        dest.writeInt(result);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
         dest.setDataPosition(sizePosition);
@@ -91,24 +80,29 @@ public class OpenPgpError implements Parcelable {
         dest.setDataPosition(startPosition + parcelableSize);
     }
 
-    public static final Creator<OpenPgpError> CREATOR = new Creator<OpenPgpError>() {
-        public OpenPgpError createFromParcel(final Parcel source) {
+    public static final Creator<OpenPgpDecryptionResult> CREATOR = new Creator<OpenPgpDecryptionResult>() {
+        public OpenPgpDecryptionResult createFromParcel(final Parcel source) {
             source.readInt(); // parcelableVersion
             int parcelableSize = source.readInt();
             int startPosition = source.dataPosition();
 
-            OpenPgpError error = new OpenPgpError();
-            error.errorId = source.readInt();
-            error.message = source.readString();
+            OpenPgpDecryptionResult vr = new OpenPgpDecryptionResult();
+            vr.result = source.readInt();
 
             // skip over all fields added in future versions of this parcel
             source.setDataPosition(startPosition + parcelableSize);
 
-            return error;
+            return vr;
         }
 
-        public OpenPgpError[] newArray(final int size) {
-            return new OpenPgpError[size];
+        public OpenPgpDecryptionResult[] newArray(final int size) {
+            return new OpenPgpDecryptionResult[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "\nresult: " + result;
+    }
+
 }

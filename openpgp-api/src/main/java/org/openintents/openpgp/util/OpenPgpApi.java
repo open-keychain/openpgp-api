@@ -49,7 +49,7 @@ public class OpenPgpApi {
      * - Introduction of ACTION_DECRYPT_METADATA, RESULT_METADATA, EXTRA_ORIGINAL_FILENAME, and OpenPgpMetadata parcel
      * - Introduction of internal NFC extras: EXTRA_NFC_SIGNED_HASH, EXTRA_NFC_SIG_CREATION_TIMESTAMP
      * 5:
-     * - OpenPgpSignatureResult: new consts SIGNATURE_KEY_REVOKED and SIGNATURE_KEY_EXPIRED
+     * - OpenPgpSignatureResult: new consts RESULT_INVALID_KEY_REVOKED and RESULT_INVALID_KEY_EXPIRED
      * - OpenPgpSignatureResult: ArrayList<String> userIds
      * 6:
      * - Deprecate ACTION_SIGN
@@ -65,8 +65,17 @@ public class OpenPgpApi {
      * - New result for ACTION_DECRYPT_VERIFY: RESULT_TYPE
      * - New ACTION_GET_SIGN_KEY_ID
      * - EXTRA_PASSPHRASE changed from String to char[]
+     * 8:
+     * - OpenPgpSignatureResult:
+     *   method getStatus() renamed to getResult()
+     *   constants have been renamed for clarity
+     *   new constants: RESULT_NO_SIGNATURE, RESULT_INVALID_INSECURE
+     *   isSignatureOnly() has been deprecated
+     * - RESULT_TYPES have been removed
+     * - new OpenPgpDecryptionResult returned via RESULT_DECRYPTION
+     * - OpenPgpSignatureResult and OpenPgpDecryptionResult are never null, they are always returned.
      */
-    public static final int API_VERSION = 7;
+    public static final int API_VERSION = 8;
 
     /**
      * General extras
@@ -161,7 +170,7 @@ public class OpenPgpApi {
      * and also signed-only input.
      * OutputStream is optional, e.g., for verifying detached signatures!
      * <p/>
-     * If OpenPgpSignatureResult.getStatus() == OpenPgpSignatureResult.SIGNATURE_KEY_MISSING
+     * If OpenPgpSignatureResult.getResult() == OpenPgpSignatureResult.RESULT_KEY_MISSING
      * in addition a PendingIntent is returned via RESULT_INTENT to download missing keys.
      * On all other status, in addition a PendingIntent is returned via RESULT_INTENT to open
      * the key view in OpenKeychain.
@@ -171,9 +180,9 @@ public class OpenPgpApi {
      * <p/>
      * returned extras:
      * OpenPgpSignatureResult   RESULT_SIGNATURE
+     * OpenPgpDecryptionResult  RESULT_DECRYPTION
      * OpenPgpDecryptMetadata   RESULT_METADATA
      * String                   RESULT_CHARSET   (charset which was specified in the headers of ascii armored input, if any)
-     * int                      RESULT_TYPE
      */
     public static final String ACTION_DECRYPT_VERIFY = "org.openintents.openpgp.action.DECRYPT_VERIFY";
 
@@ -270,14 +279,10 @@ public class OpenPgpApi {
     // DECRYPT_VERIFY
     public static final String EXTRA_DETACHED_SIGNATURE = "detached_signature";
     public static final String RESULT_SIGNATURE = "signature";
+    public static final String RESULT_DECRYPTION = "decryption";
     public static final String RESULT_METADATA = "metadata";
     // This will be the charset which was specified in the headers of ascii armored input, if any
     public static final String RESULT_CHARSET = "charset";
-
-    public static final String RESULT_TYPE = "type";
-    public static final int RESULT_TYPE_UNENCRYPTED_UNSIGNED = 0;
-    public static final int RESULT_TYPE_ENCRYPTED = 1;
-    public static final int RESULT_TYPE_SIGNED = 2;
 
     // INTERNAL, should not be used
     public static final String EXTRA_CALL_UUID1 = "call_uuid1";
@@ -334,11 +339,6 @@ public class OpenPgpApi {
 
     /**
      * InputStream and OutputStreams are always closed after operating on them!
-     *
-     * @param data
-     * @param is
-     * @param os
-     * @return
      */
     public Intent executeApi(Intent data, InputStream is, OutputStream os) {
         ParcelFileDescriptor input = null;
