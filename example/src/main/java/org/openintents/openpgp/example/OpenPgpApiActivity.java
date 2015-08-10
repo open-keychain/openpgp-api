@@ -242,7 +242,8 @@ public class OpenPgpApiActivity extends Activity {
                     }
 
                     switch (requestCode) {
-                        case REQUEST_CODE_DECRYPT_AND_VERIFY: {
+                        case REQUEST_CODE_DECRYPT_AND_VERIFY:
+                        case REQUEST_CODE_DECRYPT_AND_VERIFY_DETACHED: {
                             // RESULT_SIGNATURE and RESULT_DECRYPTION are never null!
 
                             OpenPgpSignatureResult signatureResult
@@ -254,7 +255,7 @@ public class OpenPgpApiActivity extends Activity {
 
                             break;
                         }
-                        case REQUEST_CODE_DECRYPT_AND_VERIFY_DETACHED: {
+                        case REQUEST_CODE_DETACHED_SIGN: {
                             byte[] detachedSig
                                     = result.getByteArrayExtra(OpenPgpApi.RESULT_DETACHED_SIGNATURE);
                             Log.d(OpenPgpApi.TAG, "RESULT_DETACHED_SIGNATURE: " + detachedSig.length
