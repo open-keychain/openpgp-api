@@ -2,26 +2,25 @@
 
 The OpenPGP API provides methods to execute OpenPGP operations, such as sign, encrypt, decrypt, verify, and more without user interaction from background threads. This is done by connecting your client application to a remote service provided by [OpenKeychain](http://www.openkeychain.org) or other OpenPGP providers.
 
+## News
+
+#### Version 8
+  * OpenPgpSignatureResult:
+    method getStatus() renamed to getResult()
+    constants have been renamed for clarity
+    new constants: RESULT_NO_SIGNATURE, RESULT_INVALID_INSECURE
+    isSignatureOnly() has been deprecated
+  * RESULT_TYPES have been removed
+  * new OpenPgpDecryptionResult returned via RESULT_DECRYPTION
+  * OpenPgpSignatureResult and OpenPgpDecryptionResult are never null, they are always returned.
+  
+[Full changelog here…](https://github.com/open-keychain/openpgp-api/blob/master/CHANGELOG.md)
+
 ## License
 While OpenKeychain itself is GPLv3+, the API library is licensed under Apache License v2.
 Thus, you are allowed to also use it in closed source applications as long as you respect the [Apache License v2](https://github.com/open-keychain/openpgp-api/blob/master/LICENSE).
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
-## Complete example
-A complete working example is available in the [example project](https://github.com/open-keychain/openpgp-api/blob/master/example). The [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/openpgp/example/OpenPgpApiActivity.java) contains most relevant sourcecode.
-
-## 1. Add the API library to your project
+### Add the API library to your project
 
 Add this to your build.gradle:
 
@@ -35,7 +34,11 @@ dependencies {
 }
 ```
 
-## 2. Understand the basic design of the OpenPGP API
+## Full working example
+A complete working example is available in the [example project](https://github.com/open-keychain/openpgp-api/blob/master/example). The [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/openpgp/example/OpenPgpApiActivity.java) contains most relevant sourcecode.
+
+
+### Short tutorial
 The API is **not** designed around ``Intents`` which are started via ``startActivityForResult``. These Intent actions typically start an activity for user interaction, so they are not suitable for background tasks. Most API design decisions are explained at [the bottom of this wiki page](https://github.com/open-keychain/open-keychain/wiki/OpenPGP-API#internal-design-decisions).
 
 We will go through the basic steps to understand how this API works, following this (greatly simplified) sequence diagram:
@@ -153,7 +156,7 @@ Intent result = api.executeApi(data, is, os);
     ```
 
 
-## 3. Tipps
+### Tipps
 *   ``api.executeApi(data, is, os);`` is a blocking call. If you want a convenient asynchronous call, use ``api.executeApiAsync(data, is, os, new MyCallback([... ]));``, where ``MyCallback`` is an private class implementing ``OpenPgpApi.IOpenPgpCallback``.
     See [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/openpgp/example/OpenPgpApiActivity.java) for an example.
 *   Using
