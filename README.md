@@ -5,10 +5,10 @@ The OpenPGP API provides methods to execute OpenPGP operations, such as sign, en
 ### News
 
 #### Version 8
-  * OpenPgpSignatureResult:
-    method getStatus() renamed to getResult()
-    constants have been renamed for clarity
-    new constants: RESULT_NO_SIGNATURE, RESULT_INVALID_INSECURE
+  * OpenPgpSignatureResult:  
+    method getStatus() renamed to getResult()  
+    constants have been renamed for clarity  
+    new constants: RESULT_NO_SIGNATURE, RESULT_INVALID_INSECURE  
     isSignatureOnly() has been deprecated
   * RESULT_TYPES have been removed
   * new OpenPgpDecryptionResult returned via RESULT_DECRYPTION
