@@ -41,13 +41,15 @@ public class OpenPgpKeyPreference extends Preference {
 
     public static final int REQUEST_CODE_KEY_PREFERENCE = 9999;
 
+    private static final int NO_KEY = 0;
+
     public OpenPgpKeyPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
     public CharSequence getSummary() {
-        return (mKeyId == 0) ? getContext().getString(R.string.openpgp_no_key_selected)
+        return (mKeyId == NO_KEY) ? getContext().getString(R.string.openpgp_no_key_selected)
                 : getContext().getString(R.string.openpgp_key_selected);
     }
 
@@ -77,23 +79,25 @@ public class OpenPgpKeyPreference extends Preference {
                 new OpenPgpServiceConnection.OnBound() {
                     @Override
                     public void onBound(IOpenPgpService service) {
-                        Log.d(OpenPgpApi.TAG, "onBound!");
 
-                        Intent data = new Intent();
-                        data.setAction(OpenPgpApi.ACTION_GET_SIGN_KEY_ID);
-                        data.putExtra(OpenPgpApi.EXTRA_USER_ID, mDefaultUserId);
-
-                        OpenPgpApi api = new OpenPgpApi(getContext(), mServiceConnection.getService());
-                        api.executeApiAsync(data, null, null, new MyCallback(REQUEST_CODE_KEY_PREFERENCE));
+                        getSignKeyId(new Intent());
                     }
 
                     @Override
                     public void onError(Exception e) {
-                        Log.e(OpenPgpApi.TAG, "exception when binding!", e);
+                        Log.e(OpenPgpApi.TAG, "exception on binding!", e);
                     }
                 }
         );
         mServiceConnection.bindToService();
+    }
+
+    private void getSignKeyId(Intent data) {
+        data.setAction(OpenPgpApi.ACTION_GET_SIGN_KEY_ID);
+        data.putExtra(OpenPgpApi.EXTRA_USER_ID, mDefaultUserId);
+
+        OpenPgpApi api = new OpenPgpApi(getContext(), mServiceConnection.getService());
+        api.executeApiAsync(data, null, null, new MyCallback(REQUEST_CODE_KEY_PREFERENCE));
     }
 
     private class MyCallback implements OpenPgpApi.IOpenPgpCallback {
@@ -107,7 +111,9 @@ public class OpenPgpKeyPreference extends Preference {
         public void onReturn(Intent result) {
             switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
-                    Log.e(OpenPgpApi.TAG, "RESULT_CODE_SUCCESS: Should not happen!");
+
+                    long keyId = result.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, NO_KEY);
+                    save(keyId);
 
                     break;
                 }
@@ -168,13 +174,16 @@ public class OpenPgpKeyPreference extends Preference {
 
         // Data has changed, notify so UI can be refreshed!
         notifyChanged();
+
+        // also update summary
+        setSummary(getSummary());
     }
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         // This preference type's value type is Long, so we read the default
         // value from the attributes as an Integer.
-        return (long) a.getInteger(index, 0);
+        return (long) a.getInteger(index, NO_KEY);
     }
 
     @Override
@@ -274,8 +283,7 @@ public class OpenPgpKeyPreference extends Preference {
 
     public boolean handleOnActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_KEY_PREFERENCE && resultCode == Activity.RESULT_OK) {
-            long keyId = data.getLongExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, 0);
-            save(keyId);
+            getSignKeyId(data);
             return true;
         } else {
             return false;
