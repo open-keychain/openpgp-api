@@ -16,10 +16,8 @@
  
 package org.openintents.openpgp;
 
-interface IOpenPgpService {
+interface IOpenPgpService2 {
 
-    // see OpenPgpApi for documentation
-    //DEPRECATED, do NOT use this, data returned from the service through "output" may be truncated
-    Intent execute(in Intent data, in ParcelFileDescriptor input, in ParcelFileDescriptor output);
-
+    ParcelFileDescriptor createOutputPipe(in int pipeId);
+    Intent execute(in Intent data, in ParcelFileDescriptor input, int pipeId);
 }

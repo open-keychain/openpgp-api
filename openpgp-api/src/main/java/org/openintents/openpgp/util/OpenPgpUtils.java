@@ -54,7 +54,7 @@ public class OpenPgpUtils {
     }
 
     public static boolean isAvailable(Context context) {
-        Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT);
+        Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentServices(intent, 0);
         return !resInfo.isEmpty();
     }

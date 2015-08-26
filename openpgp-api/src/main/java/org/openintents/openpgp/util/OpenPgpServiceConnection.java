@@ -22,20 +22,20 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-import org.openintents.openpgp.IOpenPgpService;
+import org.openintents.openpgp.IOpenPgpService2;
 
 public class OpenPgpServiceConnection {
 
     // callback interface
     public interface OnBound {
-        public void onBound(IOpenPgpService service);
+        public void onBound(IOpenPgpService2 service);
 
         public void onError(Exception e);
     }
 
     private Context mApplicationContext;
 
-    private IOpenPgpService mService;
+    private IOpenPgpService2 mService;
     private String mProviderPackageName;
 
     private OnBound mOnBoundListener;
@@ -66,7 +66,7 @@ public class OpenPgpServiceConnection {
         this.mOnBoundListener = onBoundListener;
     }
 
-    public IOpenPgpService getService() {
+    public IOpenPgpService2 getService() {
         return mService;
     }
 
@@ -76,7 +76,7 @@ public class OpenPgpServiceConnection {
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = IOpenPgpService.Stub.asInterface(service);
+            mService = IOpenPgpService2.Stub.asInterface(service);
             if (mOnBoundListener != null) {
                 mOnBoundListener.onBound(mService);
             }
@@ -96,7 +96,7 @@ public class OpenPgpServiceConnection {
         // if not already bound...
         if (mService == null) {
             try {
-                Intent serviceIntent = new Intent(OpenPgpApi.SERVICE_INTENT);
+                Intent serviceIntent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
                 // NOTE: setPackage is very important to restrict the intent to this provider only!
                 serviceIntent.setPackage(mProviderPackageName);
                 boolean connect = mApplicationContext.bindService(serviceIntent, mServiceConnection,
