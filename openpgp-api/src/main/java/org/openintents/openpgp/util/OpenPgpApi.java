@@ -41,7 +41,7 @@ public class OpenPgpApi {
     /**
      * see CHANGELOG.md
      */
-    public static final int API_VERSION = 8;
+    public static final int API_VERSION = 9;
 
     /**
      * General extras

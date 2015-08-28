@@ -1,5 +1,10 @@
 # Version history
 
+## Version 9
+  * AIDL Service has been changed from IOpenPgpService.aidl to IOpenPgpService2.aidl  
+    This fixes truncated data streams (thanks to 'mgeier63').
+  * Fix for OpenPgpKeyPreference: Properly execute pending user interactions
+
 ## Version 8
   * OpenPgpSignatureResult:  
     method getStatus() renamed to getResult()  
