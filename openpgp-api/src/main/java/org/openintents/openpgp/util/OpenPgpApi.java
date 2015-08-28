@@ -24,18 +24,19 @@ import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
-import org.openintents.openpgp.IOpenPgpService;
+import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class OpenPgpApi {
 
     public static final String TAG = "OpenPgp API";
 
-    public static final String SERVICE_INTENT = "org.openintents.openpgp.IOpenPgpService";
+    public static final String SERVICE_INTENT_2 = "org.openintents.openpgp.IOpenPgpService2";
 
     /**
      * see CHANGELOG.md
@@ -253,10 +254,11 @@ public class OpenPgpApi {
     public static final String EXTRA_CALL_UUID1 = "call_uuid1";
     public static final String EXTRA_CALL_UUID2 = "call_uuid2";
 
-    IOpenPgpService mService;
+    IOpenPgpService2 mService;
     Context mContext;
+    final AtomicInteger mPipeIdGen = new AtomicInteger();
 
-    public OpenPgpApi(Context context, IOpenPgpService service) {
+    public OpenPgpApi(Context context, IOpenPgpService2 service) {
         this.mContext = context;
         this.mService = service;
     }
@@ -314,37 +316,31 @@ public class OpenPgpApi {
 
             Intent result;
 
-            // pipe the input and output
             if (is != null) {
-                input = ParcelFileDescriptorUtil.pipeFrom(is,
-                        new ParcelFileDescriptorUtil.IThreadListener() {
-
-                            @Override
-                            public void onThreadFinished(Thread thread) {
-                                //Log.d(OpenPgpApi.TAG, "Copy to service finished");
-                            }
-                        }
-                );
+                input = ParcelFileDescriptorUtil.pipeFrom(is);
             }
-            if (os != null) {
-                output = ParcelFileDescriptorUtil.pipeTo(os,
-                        new ParcelFileDescriptorUtil.IThreadListener() {
 
-                            @Override
-                            public void onThreadFinished(Thread thread) {
-                                //Log.d(OpenPgpApi.TAG, "Service finished writing!");
-                            }
-                        }
-                );
+            Thread pumpThread =null;
+            int outputPipeId = 0;
+
+            if (os != null) {
+                outputPipeId = mPipeIdGen.incrementAndGet();
+                output = mService.createOutputPipe(outputPipeId);
+                pumpThread = ParcelFileDescriptorUtil.pipeTo(os, output);
             }
 
             // blocks until result is ready
-            result = mService.execute(data, input, output);
+            result = mService.execute(data, input, outputPipeId);
 
             // set class loader to current context to allow unparcelling
             // of OpenPgpError and OpenPgpSignatureResult
             // http://stackoverflow.com/a/3806769
             result.setExtrasClassLoader(mContext.getClassLoader());
+
+            //wait for ALL data being pumped from remote side
+            if (pumpThread != null) {
+                pumpThread.join();
+            }
 
             return result;
         } catch (Exception e) {

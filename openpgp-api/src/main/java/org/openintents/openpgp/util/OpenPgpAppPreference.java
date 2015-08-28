@@ -263,7 +263,7 @@ public class OpenPgpAppPreference extends DialogPreference {
 
         // search for OpenPGP providers...
         ArrayList<OpenPgpProviderEntry> providerList = new ArrayList<>();
-        Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT);
+        Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
         List<ResolveInfo> resInfo = getContext().getPackageManager().queryIntentServices(intent, 0);
         if (!resInfo.isEmpty()) {
             for (ResolveInfo resolveInfo : resInfo) {

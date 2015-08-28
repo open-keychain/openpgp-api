@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2015 Dominik Schürmann <dominik@dominikschuermann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 package org.openintents.openpgp;
 
-interface IOpenPgpService {
+interface IOpenPgpService2 {
 
     /**
-     * do NOT use this, data returned from the service through "output" may be truncated
-     * @deprecated
+     * see org.openintents.openpgp.util.OpenPgpApi for documentation
      */
-    Intent execute(in Intent data, in ParcelFileDescriptor input, in ParcelFileDescriptor output);
+    ParcelFileDescriptor createOutputPipe(in int pipeId);
 
+    /**
+     * see org.openintents.openpgp.util.OpenPgpApi for documentation
+     */
+    Intent execute(in Intent data, in ParcelFileDescriptor input, int pipeId);
 }

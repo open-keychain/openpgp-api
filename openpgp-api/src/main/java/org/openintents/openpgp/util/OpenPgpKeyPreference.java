@@ -29,7 +29,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import org.openintents.openpgp.IOpenPgpService;
+import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.R;
 
@@ -78,7 +78,7 @@ public class OpenPgpKeyPreference extends Preference {
                 mOpenPgpProvider,
                 new OpenPgpServiceConnection.OnBound() {
                     @Override
-                    public void onBound(IOpenPgpService service) {
+                    public void onBound(IOpenPgpService2 service) {
 
                         getSignKeyId(new Intent());
                     }

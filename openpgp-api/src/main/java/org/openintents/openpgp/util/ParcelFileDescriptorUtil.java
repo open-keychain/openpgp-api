@@ -18,89 +18,70 @@
 package org.openintents.openpgp.util;
 
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Partially based on <a href="http://stackoverflow.com/questions/18212152/">Stackoverflow: Transfer InputStream to another Service (across process boundaries)</a>
- **/
 public class ParcelFileDescriptorUtil {
 
-    public interface IThreadListener {
-        void onThreadFinished(final Thread thread);
-    }
-
-    public static ParcelFileDescriptor pipeFrom(InputStream inputStream, IThreadListener listener)
+    public static ParcelFileDescriptor pipeFrom(InputStream inputStream)
             throws IOException {
         ParcelFileDescriptor[] pipe = ParcelFileDescriptor.createPipe();
         ParcelFileDescriptor readSide = pipe[0];
         ParcelFileDescriptor writeSide = pipe[1];
 
-        // start the transfer thread
-        new TransferThread(inputStream, new ParcelFileDescriptor.AutoCloseOutputStream(writeSide),
-                listener)
+        new TransferThread(inputStream, new ParcelFileDescriptor.AutoCloseOutputStream(writeSide))
                 .start();
 
         return readSide;
     }
 
-    public static ParcelFileDescriptor pipeTo(OutputStream outputStream, IThreadListener listener)
+
+    public static TransferThread pipeTo(OutputStream outputStream, ParcelFileDescriptor output)
             throws IOException {
-        ParcelFileDescriptor[] pipe = ParcelFileDescriptor.createPipe();
-        ParcelFileDescriptor readSide = pipe[0];
-        ParcelFileDescriptor writeSide = pipe[1];
 
-        // start the transfer thread
-        new TransferThread(new ParcelFileDescriptor.AutoCloseInputStream(readSide), outputStream,
-                listener)
-                .start();
+        TransferThread t = new TransferThread(new ParcelFileDescriptor.AutoCloseInputStream(output), outputStream);
 
-        return writeSide;
+        t.start();
+        return t;
     }
+
 
     static class TransferThread extends Thread {
         final InputStream mIn;
         final OutputStream mOut;
-        final IThreadListener mListener;
 
-        TransferThread(InputStream in, OutputStream out, IThreadListener listener) {
-            super("ParcelFileDescriptor Transfer Thread");
+        TransferThread(InputStream in, OutputStream out) {
+            super("IPC Transfer Thread");
             mIn = in;
             mOut = out;
-            mListener = listener;
             setDaemon(true);
         }
 
         @Override
         public void run() {
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[4096];
             int len;
 
             try {
                 while ((len = mIn.read(buf)) > 0) {
                     mOut.write(buf, 0, len);
                 }
-                mOut.flush(); // just to be safe
             } catch (IOException e) {
-                //Log.e(OpenPgpApi.TAG, "TransferThread" + getId() + ": writing failed", e);
+                Log.e(OpenPgpApi.TAG, "IOException when writing to out", e);
             } finally {
                 try {
                     mIn.close();
-                } catch (IOException e) {
-                    //Log.e(OpenPgpApi.TAG, "TransferThread" + getId(), e);
+                } catch (IOException ignored) {
                 }
                 try {
                     mOut.close();
-                } catch (IOException e) {
-                    //Log.e(OpenPgpApi.TAG, "TransferThread" + getId(), e);
+                } catch (IOException ignored) {
                 }
-            }
-            if (mListener != null) {
-                //Log.d(OpenPgpApi.TAG, "TransferThread " + getId() + " finished!");
-                mListener.onThreadFinished(this);
             }
         }
     }
+
 }
