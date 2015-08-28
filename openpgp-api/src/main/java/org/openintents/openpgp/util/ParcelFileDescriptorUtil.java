@@ -18,6 +18,7 @@
 package org.openintents.openpgp.util;
 
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,17 +70,15 @@ public class ParcelFileDescriptorUtil {
                     mOut.write(buf, 0, len);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(OpenPgpApi.TAG, "IOException when writing to out", e);
             } finally {
                 try {
                     mIn.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
                 }
                 try {
                     mOut.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
                 }
             }
         }

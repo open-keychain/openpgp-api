@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package org.openintents.openpgp;
 
 interface IOpenPgpService {
 
-    // see OpenPgpApi for documentation
-    //DEPRECATED, do NOT use this, data returned from the service through "output" may be truncated
+    /**
+     * do NOT use this, data returned from the service through "output" may be truncated
+     * @deprecated
+     */
     Intent execute(in Intent data, in ParcelFileDescriptor input, in ParcelFileDescriptor output);
 
 }
