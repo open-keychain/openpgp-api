@@ -25,10 +25,11 @@ public class OpenPgpMetadata implements Parcelable {
      * old versions of the protocol (and thus old versions of this class), we need a versioning
      * system for the parcels sent between the clients and the providers.
      */
-    public static final int PARCELABLE_VERSION = 1;
+    public static final int PARCELABLE_VERSION = 2;
 
     String filename;
     String mimeType;
+    String charset;
     long modificationTime;
     long originalSize;
 
@@ -48,7 +49,20 @@ public class OpenPgpMetadata implements Parcelable {
         return originalSize;
     }
 
+    public String getCharset() {
+        return charset;
+    }
+
     public OpenPgpMetadata() {
+    }
+
+    public OpenPgpMetadata(String filename, String mimeType, long modificationTime,
+            long originalSize, String charset) {
+        this.filename = filename;
+        this.mimeType = mimeType;
+        this.modificationTime = modificationTime;
+        this.originalSize = originalSize;
+        this.charset = charset;
     }
 
     public OpenPgpMetadata(String filename, String mimeType, long modificationTime,
@@ -86,6 +100,8 @@ public class OpenPgpMetadata implements Parcelable {
         dest.writeString(mimeType);
         dest.writeLong(modificationTime);
         dest.writeLong(originalSize);
+        // version 2
+        dest.writeString(charset);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
         dest.setDataPosition(sizePosition);
@@ -95,7 +111,7 @@ public class OpenPgpMetadata implements Parcelable {
 
     public static final Creator<OpenPgpMetadata> CREATOR = new Creator<OpenPgpMetadata>() {
         public OpenPgpMetadata createFromParcel(final Parcel source) {
-            source.readInt(); // parcelableVersion
+            int version = source.readInt(); // parcelableVersion
             int parcelableSize = source.readInt();
             int startPosition = source.dataPosition();
 
@@ -104,6 +120,9 @@ public class OpenPgpMetadata implements Parcelable {
             vr.mimeType = source.readString();
             vr.modificationTime = source.readLong();
             vr.originalSize = source.readLong();
+            if (version >= 2) {
+                vr.charset = source.readString();
+            }
 
             // skip over all fields added in future versions of this parcel
             source.setDataPosition(startPosition + parcelableSize);
@@ -122,6 +141,7 @@ public class OpenPgpMetadata implements Parcelable {
         out += "\nmimeType: " + mimeType;
         out += "\nmodificationTime: " + modificationTime;
         out += "\noriginalSize: " + originalSize;
+        out += "\ncharset: " + charset;
         return out;
     }
 
