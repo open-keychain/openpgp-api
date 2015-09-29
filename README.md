@@ -106,7 +106,7 @@ Intent result = api.executeApi(data, is, os);
     * ``OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED``
 
     If ``RESULT_CODE_USER_INTERACTION_REQUIRED`` is returned, an additional ``PendingIntent`` is returned to the client, which must be used to get user input required to process the request.
-    A ``PendingIntent`` is executed with ``startIntentSenderForResult``, which starts a activity, originally belonging to OpenKeychain, on the [task stack](http://developer.android.com/guide/components/tasks-and-back-stack.html) of the client.
+    A ``PendingIntent`` is executed with ``startIntentSenderForResult``, which starts an activity, originally belonging to OpenKeychain, on the [task stack](http://developer.android.com/guide/components/tasks-and-back-stack.html) of the client.
     Only if ``RESULT_CODE_SUCCESS`` is returned, ``os`` actually contains data.
     A nearly complete example looks like this:
     ```java
