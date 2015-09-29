@@ -173,3 +173,4 @@ Intent result = api.executeApi(data, is, os);
     connects to OpenKeychain directly.
     If you want to let the user choose between OpenPGP providers, you can implement the [``OpenPgpAppPreference.java``](https://github.com/open-keychain/openpgp-api/tree/master/openpgp-api/src/main/java/org/openintents/openpgp/util/OpenPgpAppPreference.java) like done in the example app.
 
+*    To enable installing a debug and release version at the same time, the `debug` build of OpenKeychain uses `org.sufficientlysecure.keychain.debug` as a package name. Make sure you connect to the right one during development!
