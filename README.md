@@ -4,15 +4,11 @@ The OpenPGP API provides methods to execute OpenPGP operations, such as sign, en
 
 ### News
 
-#### Version 8
-  * OpenPgpSignatureResult:  
-    method getStatus() renamed to getResult()  
-    constants have been renamed for clarity  
-    new constants: RESULT_NO_SIGNATURE, RESULT_INVALID_INSECURE  
-    isSignatureOnly() has been deprecated
-  * RESULT_TYPES have been removed
-  * new OpenPgpDecryptionResult returned via RESULT_DECRYPTION
-  * OpenPgpSignatureResult and OpenPgpDecryptionResult are never null, they are always returned.
+#### Version 9
+  * AIDL Service has been changed from IOpenPgpService.aidl to IOpenPgpService2.aidl  
+    This fixes truncated data streams (thanks to 'mgeier63').
+  * Fix for OpenPgpKeyPreference: Properly execute pending user interactions
+  * Charset moved to OpenPgpMetadata
 
 [Full changelog here…](https://github.com/open-keychain/openpgp-api/blob/master/CHANGELOG.md)
 
