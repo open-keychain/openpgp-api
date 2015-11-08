@@ -192,8 +192,13 @@ public class OpenPgpApi {
      * It returns RESULT_CODE_USER_INTERACTION_REQUIRED if the Provider does not have the key.
      * The PendingIntent from RESULT_INTENT can be used to retrieve those from a keyserver.
      * <p/>
+     * If an Output stream has been defined the whole public key is returned.
      * required extras:
      * long        EXTRA_KEY_ID
+     * <p/>
+     * optional extras:
+     * String      EXTRA_REQUEST_ASCII_ARMOR (request that the returned key is encoded in ASCII Armor)
+     *
      */
     public static final String ACTION_GET_KEY = "org.openintents.openpgp.action.GET_KEY";
 
