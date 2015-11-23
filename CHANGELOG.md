@@ -1,5 +1,8 @@
 # Version history
 
+## Version 10
+  * Retrieve whole public key via ACTION_GET_KEY
+
 ## Version 9
   * AIDL Service has been changed from IOpenPgpService.aidl to IOpenPgpService2.aidl  
     This fixes truncated data streams (thanks to 'mgeier63').

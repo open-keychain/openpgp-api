@@ -4,11 +4,8 @@ The OpenPGP API provides methods to execute OpenPGP operations, such as sign, en
 
 ### News
 
-#### Version 9
-  * AIDL Service has been changed from IOpenPgpService.aidl to IOpenPgpService2.aidl  
-    This fixes truncated data streams (thanks to 'mgeier63').
-  * Fix for OpenPgpKeyPreference: Properly execute pending user interactions
-  * Charset moved to OpenPgpMetadata
+#### Version 10
+  * Retrieve whole public key via ACTION_GET_KEY
 
 [Full changelog here…](https://github.com/open-keychain/openpgp-api/blob/master/CHANGELOG.md)
 
@@ -26,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:openpgp-api:9.0'
+    compile 'org.sufficientlysecure:openpgp-api:10.0'
 }
 ```
 
