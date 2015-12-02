@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         versionCode 8
-        versionName '9.0' // API-Version . minor
+        versionName '10.0' // API-Version . minor
         minSdkVersion 9
         targetSdkVersion 22
     }
@@ -22,7 +22,7 @@ publish {
     userOrg = 'sufficientlysecure'
     groupId = 'org.sufficientlysecure'
     artifactId = 'openpgp-api'
-    version = '9.0'
+    version = '10.0'
     description = 'The OpenPGP API provides methods to execute OpenPGP operations, such as sign, encrypt, decrypt, verify, and more without user interaction from background threads.'
     website = 'https://github.com/open-keychain/openpgp-api'
 }
