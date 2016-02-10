@@ -56,6 +56,9 @@ public class OpenPgpApi {
      * PendingIntent RESULT_INTENT               (if RESULT_CODE == RESULT_CODE_USER_INTERACTION_REQUIRED)
      */
 
+    // TODO document
+    public static final String ACTION_CHECK_PERMISSION = "org.openintents.openpgp.action.CHECK_PERMISSION";
+
     /**
      * DEPRECATED
      * Same as ACTION_CLEARTEXT_SIGN
