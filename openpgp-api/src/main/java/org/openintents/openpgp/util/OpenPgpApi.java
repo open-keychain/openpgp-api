@@ -65,14 +65,7 @@ public class OpenPgpApi {
      */
     public static final String ACTION_CHECK_PERMISSION = "org.openintents.openpgp.action.CHECK_PERMISSION";
 
-    /**
-     * DEPRECATED
-     * Same as ACTION_CLEARTEXT_SIGN
-     * <p/>
-     * optional extras:
-     * boolean       EXTRA_REQUEST_ASCII_ARMOR   (DEPRECATED: this makes no sense here)
-     * char[]        EXTRA_PASSPHRASE            (key passphrase)
-     */
+    @Deprecated
     public static final String ACTION_SIGN = "org.openintents.openpgp.action.SIGN";
 
     /**
@@ -212,11 +205,34 @@ public class OpenPgpApi {
      */
     public static final String ACTION_GET_KEY = "org.openintents.openpgp.action.GET_KEY";
 
+    /**
+     * Backup keys
+     * <p/>
+     * required extras:
+     * long[]        EXTRA_KEY_IDS
+     * boolean       EXTRA_BACKUP_SECRET
+     *
+     */
+    public static final String ACTION_BACKUP = "org.openintents.openpgp.action.BACKUP";
+
+    /**
+     * Restore keys
+     *
+     */
+    public static final String ACTION_RESTORE = "org.openintents.openpgp.action.RESTORE";
+
+    /**
+     * Import keys from input stream. Will return RESULT_CODE_USER_INTERACTION_REQUIRED to let the
+     * user acknowledge the import.
+     *
+     */
+    public static final String ACTION_IMPORT_KEY = "org.openintents.openpgp.action.IMPORT_KEYS";
+
 
     /* Intent extras */
     public static final String EXTRA_API_VERSION = "api_version";
 
-    // DEPRECATED!!!
+    @Deprecated
     public static final String EXTRA_ACCOUNT_NAME = "account_name";
 
     // ACTION_DETACHED_SIGN, ENCRYPT, SIGN_AND_ENCRYPT, DECRYPT_VERIFY
@@ -245,6 +261,9 @@ public class OpenPgpApi {
     public static final String EXTRA_KEY_ID = "key_id";
     public static final String RESULT_KEY_IDS = "key_ids";
 
+    // BACKUP
+    public static final String EXTRA_BACKUP_SECRET = "backup_secret";
+
     /* Service Intent returns */
     public static final String RESULT_CODE = "result_code";
 
@@ -269,7 +288,7 @@ public class OpenPgpApi {
     // This will be the charset which was specified in the headers of ascii armored input, if any
     public static final String RESULT_CHARSET = "charset";
 
-    // INTERNAL, should not be used
+    // INTERNAL, must not be used
     public static final String EXTRA_CALL_UUID1 = "call_uuid1";
     public static final String EXTRA_CALL_UUID2 = "call_uuid2";
 
