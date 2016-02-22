@@ -49,10 +49,11 @@ public class OpenPgpSignatureResult implements Parcelable {
     public static final int RESULT_INVALID_INSECURE = 6;
 
     int result;
-    boolean signatureOnly;
     String primaryUserId;
     ArrayList<String> userIds;
     long keyId;
+    @Deprecated
+    boolean signatureOnly;
 
     public int getResult() {
         return result;
@@ -62,16 +63,12 @@ public class OpenPgpSignatureResult implements Parcelable {
         this.result = result;
     }
 
-    /**
-     * @deprecated
-     */
+    @Deprecated
     public boolean isSignatureOnly() {
         return signatureOnly;
     }
 
-    /**
-     * @deprecated
-     */
+    @Deprecated
     public void setSignatureOnly(boolean signatureOnly) {
         this.signatureOnly = signatureOnly;
     }

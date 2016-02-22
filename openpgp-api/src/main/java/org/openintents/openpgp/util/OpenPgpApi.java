@@ -201,32 +201,35 @@ public class OpenPgpApi {
      * <p/>
      * optional extras:
      * String      EXTRA_REQUEST_ASCII_ARMOR (request that the returned key is encoded in ASCII Armor)
-     *
      */
     public static final String ACTION_GET_KEY = "org.openintents.openpgp.action.GET_KEY";
 
     /**
-     * Backup keys
+     * Backup all keys given by EXTRA_KEY_IDS and if requested their secret parts.
+     * The encrypted backup will be written to the OutputStream.
+     * The client app has no access to the backup code used to encrypt the backup!
+     * This operation always requires user interaction with RESULT_CODE_USER_INTERACTION_REQUIRED!
      * <p/>
      * required extras:
-     * long[]        EXTRA_KEY_IDS
-     * boolean       EXTRA_BACKUP_SECRET
-     *
+     * long[]        EXTRA_KEY_IDS       (keys that should be included in the backup)
+     * boolean       EXTRA_BACKUP_SECRET (also backup secret keys)
      */
     public static final String ACTION_BACKUP = "org.openintents.openpgp.action.BACKUP";
 
     /**
-     * Restore keys
+     * Restore keys given a backup as InputStream.
+     * This operation always requires user interaction with RESULT_CODE_USER_INTERACTION_REQUIRED!
      *
+     * NOT IMPLEMENTED RIGHT NOW!
      */
-    public static final String ACTION_RESTORE = "org.openintents.openpgp.action.RESTORE";
+    private static final String ACTION_RESTORE = "org.openintents.openpgp.action.RESTORE";
 
     /**
-     * Import keys from input stream. Will return RESULT_CODE_USER_INTERACTION_REQUIRED to let the
-     * user acknowledge the import.
+     * Import keys from InputStream. Only public keys will be imported!
      *
+     * NOT IMPLEMENTED RIGHT NOW!
      */
-    public static final String ACTION_IMPORT_KEY = "org.openintents.openpgp.action.IMPORT_KEYS";
+    private static final String ACTION_IMPORT_KEY = "org.openintents.openpgp.action.IMPORT_KEYS";
 
 
     /* Intent extras */
