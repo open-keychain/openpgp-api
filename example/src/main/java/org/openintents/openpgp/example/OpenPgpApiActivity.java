@@ -49,6 +49,7 @@ public class OpenPgpApiActivity extends Activity {
     private EditText mDetachedSignature;
     private EditText mEncryptUserIds;
     private EditText mGetKeyEdit;
+    private EditText mGetKeyIdsEdit;
 
     private OpenPgpServiceConnection mServiceConnection;
 
@@ -79,7 +80,7 @@ public class OpenPgpApiActivity extends Activity {
         Button decryptAndVerify = (Button) findViewById(R.id.crypto_provider_demo_decrypt_and_verify);
         Button verifyDetachedSignature = (Button) findViewById(R.id.crypto_provider_demo_verify_detached_signature);
         mGetKeyEdit = (EditText) findViewById(R.id.crypto_provider_demo_get_key_edit);
-        EditText getKeyIdsEdit = (EditText) findViewById(R.id.crypto_provider_demo_get_key_ids_edit);
+        mGetKeyIdsEdit = (EditText) findViewById(R.id.crypto_provider_demo_get_key_ids_edit);
         Button getKey = (Button) findViewById(R.id.crypto_provider_demo_get_key);
         Button getKeyIds = (Button) findViewById(R.id.crypto_provider_demo_get_key_ids);
 
@@ -387,6 +388,7 @@ public class OpenPgpApiActivity extends Activity {
 
     public void getKeyIds(Intent data) {
         data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
+        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, mGetKeyIdsEdit.getText().toString().split(","));
 
         OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
         api.executeApiAsync(data, null, null, new MyCallback(false, null, REQUEST_CODE_GET_KEY_IDS));
@@ -394,7 +396,6 @@ public class OpenPgpApiActivity extends Activity {
 
     public void getAnyKeyIds(Intent data) {
         data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
-//        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, mGetKeyIdsEdit.getText().toString().split(","));
 
         OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
         api.executeApiAsync(data, null, null, new MyCallback(false, null, REQUEST_CODE_GET_KEY_IDS));
