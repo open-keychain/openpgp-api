@@ -63,6 +63,7 @@ public class OpenPgpApiActivity extends Activity {
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
     public static final int REQUEST_CODE_DETACHED_SIGN = 9916;
     public static final int REQUEST_CODE_DECRYPT_AND_VERIFY_DETACHED = 9917;
+    public static final int REQUEST_CODE_BACKUP = 9918;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class OpenPgpApiActivity extends Activity {
         mGetKeyIdsEdit = (EditText) findViewById(R.id.crypto_provider_demo_get_key_ids_edit);
         Button getKey = (Button) findViewById(R.id.crypto_provider_demo_get_key);
         Button getKeyIds = (Button) findViewById(R.id.crypto_provider_demo_get_key_ids);
+        Button backup = (Button) findViewById(R.id.crypto_provider_demo_backup);
 
         cleartextSign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +132,12 @@ public class OpenPgpApiActivity extends Activity {
             @Override
             public void onClick(View v) {
                 getKeyIds(new Intent());
+            }
+        });
+        backup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backup(new Intent());
             }
         });
 
@@ -401,6 +409,17 @@ public class OpenPgpApiActivity extends Activity {
         api.executeApiAsync(data, null, null, new MyCallback(false, null, REQUEST_CODE_GET_KEY_IDS));
     }
 
+    public void backup(Intent data) {
+        data.setAction(OpenPgpApi.ACTION_BACKUP);
+        data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, new long[]{Long.decode(mGetKeyEdit.getText().toString())});
+        data.putExtra(OpenPgpApi.EXTRA_BACKUP_SECRET, true);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+        api.executeApiAsync(data, null, os, new MyCallback(true, os, REQUEST_CODE_BACKUP));
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -445,6 +464,10 @@ public class OpenPgpApiActivity extends Activity {
                 }
                 case REQUEST_CODE_GET_KEY_IDS: {
                     getKeyIds(data);
+                    break;
+                }
+                case REQUEST_CODE_BACKUP: {
+                    backup(data);
                     break;
                 }
             }

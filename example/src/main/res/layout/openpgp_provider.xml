@@ -153,7 +153,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get key:"
+            android:text="Get key/backup key:"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -167,6 +167,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Get key" />
+
+        <Button
+            android:id="@+id/crypto_provider_demo_backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Backup" />
 
         <TextView
             android:layout_width="wrap_content"
