@@ -413,6 +413,7 @@ public class OpenPgpApiActivity extends Activity {
         data.setAction(OpenPgpApi.ACTION_BACKUP);
         data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, new long[]{Long.decode(mGetKeyEdit.getText().toString())});
         data.putExtra(OpenPgpApi.EXTRA_BACKUP_SECRET, true);
+        data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 

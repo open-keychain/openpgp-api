@@ -211,8 +211,11 @@ public class OpenPgpApi {
      * This operation always requires user interaction with RESULT_CODE_USER_INTERACTION_REQUIRED!
      * <p/>
      * required extras:
-     * long[]        EXTRA_KEY_IDS       (keys that should be included in the backup)
-     * boolean       EXTRA_BACKUP_SECRET (also backup secret keys)
+     * long[]      EXTRA_KEY_IDS       (keys that should be included in the backup)
+     * boolean     EXTRA_BACKUP_SECRET (also backup secret keys)
+     * <p/>
+     * optional extras:
+     * String      EXTRA_REQUEST_ASCII_ARMOR (request that the returned backup is encoded in ASCII Armor)
      */
     public static final String ACTION_BACKUP = "org.openintents.openpgp.action.BACKUP";
 
