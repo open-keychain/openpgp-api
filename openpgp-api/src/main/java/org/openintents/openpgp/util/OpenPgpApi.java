@@ -41,7 +41,7 @@ public class OpenPgpApi {
     /**
      * see CHANGELOG.md
      */
-    public static final int API_VERSION = 10;
+    public static final int API_VERSION = 11;
 
     /**
      * General extras
@@ -56,7 +56,13 @@ public class OpenPgpApi {
      * PendingIntent RESULT_INTENT               (if RESULT_CODE == RESULT_CODE_USER_INTERACTION_REQUIRED)
      */
 
-    // TODO document
+    /**
+     * This action performs no operation, but can be used to check if the App has permission
+     * to access the API in general, returning a user interaction PendingIntent otherwise.
+     * This can be used to trigger the permission dialog explicitly.
+     *
+     * This action uses no extras.
+     */
     public static final String ACTION_CHECK_PERMISSION = "org.openintents.openpgp.action.CHECK_PERMISSION";
 
     /**
@@ -98,6 +104,7 @@ public class OpenPgpApi {
      * <p/>
      * returned extras:
      * byte[]        RESULT_DETACHED_SIGNATURE
+     * String        RESULT_SIGNATURE_MICALG     (contains the name of the used signature algorithm as a string)
      */
     public static final String ACTION_DETACHED_SIGN = "org.openintents.openpgp.action.DETACHED_SIGN";
 

@@ -1,5 +1,9 @@
 # Version history
 
+## Version 11
+  * Added a simple no-op to check if the api is available and app has permission as ACTION_CHECK_PERMISSON
+  * The ACTION_DETACHED_SIGN action now returns RESULT_SIGNATURE_MICALG, which contains the algorithm name used for signing (relevant for PGP/MIME)
+
 ## Version 10
   * Retrieve whole public key via ACTION_GET_KEY
 
