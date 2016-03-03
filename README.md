@@ -4,8 +4,9 @@ The OpenPGP API provides methods to execute OpenPGP operations, such as sign, en
 
 ### News
 
-#### Version 10
-  * Retrieve whole public key via ACTION_GET_KEY
+## Version 11
+  * Added a simple no-op to check if the api is available and app has permission as ACTION_CHECK_PERMISSON
+  * The ACTION_DETACHED_SIGN action now returns RESULT_SIGNATURE_MICALG, which contains the algorithm name used for signing (relevant for PGP/MIME)
 
 [Full changelog here…](https://github.com/open-keychain/openpgp-api/blob/master/CHANGELOG.md)
 
@@ -23,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:openpgp-api:10.0'
+    compile 'org.sufficientlysecure:openpgp-api:11.0'
 }
 ```
 
