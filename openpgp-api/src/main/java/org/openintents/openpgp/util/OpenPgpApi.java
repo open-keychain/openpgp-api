@@ -60,7 +60,7 @@ public class OpenPgpApi {
      * This action performs no operation, but can be used to check if the App has permission
      * to access the API in general, returning a user interaction PendingIntent otherwise.
      * This can be used to trigger the permission dialog explicitly.
-     *
+     * 
      * This action uses no extras.
      */
     public static final String ACTION_CHECK_PERMISSION = "org.openintents.openpgp.action.CHECK_PERMISSION";
@@ -74,10 +74,10 @@ public class OpenPgpApi {
      * cleartext signatures per RFC 4880 before the text is actually signed:
      * - end cleartext with newline
      * - remove whitespaces on line endings
-     * <p/>
+     * 
      * required extras:
      * long          EXTRA_SIGN_KEY_ID           (key id of signing key)
-     * <p/>
+     * 
      * optional extras:
      * char[]        EXTRA_PASSPHRASE            (key passphrase)
      */
@@ -87,14 +87,14 @@ public class OpenPgpApi {
      * Sign text or binary data resulting in a detached signature.
      * No OutputStream necessary for ACTION_DETACHED_SIGN (No magic pre-processing like in ACTION_CLEARTEXT_SIGN)!
      * The detached signature is returned separately in RESULT_DETACHED_SIGNATURE.
-     * <p/>
+     * 
      * required extras:
      * long          EXTRA_SIGN_KEY_ID           (key id of signing key)
-     * <p/>
+     * 
      * optional extras:
      * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for detached signature)
      * char[]        EXTRA_PASSPHRASE            (key passphrase)
-     * <p/>
+     * 
      * returned extras:
      * byte[]        RESULT_DETACHED_SIGNATURE
      * String        RESULT_SIGNATURE_MICALG     (contains the name of the used signature algorithm as a string)
@@ -103,12 +103,12 @@ public class OpenPgpApi {
 
     /**
      * Encrypt
-     * <p/>
+     * 
      * required extras:
      * String[]      EXTRA_USER_IDS              (=emails of recipients, if more than one key has a user_id, a PendingIntent is returned via RESULT_INTENT)
      * or
      * long[]        EXTRA_KEY_IDS
-     * <p/>
+     * 
      * optional extras:
      * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
      * char[]        EXTRA_PASSPHRASE            (key passphrase)
@@ -119,12 +119,12 @@ public class OpenPgpApi {
 
     /**
      * Sign and encrypt
-     * <p/>
+     * 
      * required extras:
      * String[]      EXTRA_USER_IDS              (=emails of recipients, if more than one key has a user_id, a PendingIntent is returned via RESULT_INTENT)
      * or
      * long[]        EXTRA_KEY_IDS
-     * <p/>
+     * 
      * optional extras:
      * long          EXTRA_SIGN_KEY_ID           (key id of signing key)
      * boolean       EXTRA_REQUEST_ASCII_ARMOR   (request ascii armor for output)
@@ -138,15 +138,15 @@ public class OpenPgpApi {
      * Decrypts and verifies given input stream. This methods handles encrypted-only, signed-and-encrypted,
      * and also signed-only input.
      * OutputStream is optional, e.g., for verifying detached signatures!
-     * <p/>
+     * 
      * If OpenPgpSignatureResult.getResult() == OpenPgpSignatureResult.RESULT_KEY_MISSING
      * in addition a PendingIntent is returned via RESULT_INTENT to download missing keys.
      * On all other status, in addition a PendingIntent is returned via RESULT_INTENT to open
      * the key view in OpenKeychain.
-     * <p/>
+     * 
      * optional extras:
      * byte[]        EXTRA_DETACHED_SIGNATURE    (detached signature)
-     * <p/>
+     * 
      * returned extras:
      * OpenPgpSignatureResult   RESULT_SIGNATURE
      * OpenPgpDecryptionResult  RESULT_DECRYPTION
@@ -157,9 +157,9 @@ public class OpenPgpApi {
 
     /**
      * Decrypts the header of an encrypted file to retrieve metadata such as original filename.
-     * <p/>
+     * 
      * This does not decrypt the actual content of the file.
-     * <p/>
+     * 
      * returned extras:
      * OpenPgpDecryptMetadata   RESULT_METADATA
      * String                   RESULT_CHARSET   (charset which was specified in the headers of ascii armored input, if any)
@@ -168,10 +168,10 @@ public class OpenPgpApi {
 
     /**
      * Select key id for signing
-     * <p/>
+     * 
      * optional extras:
      * String      EXTRA_USER_ID
-     * <p/>
+     * 
      * returned extras:
      * long        EXTRA_SIGN_KEY_ID
      */
@@ -179,10 +179,10 @@ public class OpenPgpApi {
 
     /**
      * Get key ids based on given user ids (=emails)
-     * <p/>
+     * 
      * required extras:
      * String[]      EXTRA_USER_IDS
-     * <p/>
+     * 
      * returned extras:
      * long[]        RESULT_KEY_IDS
      */
@@ -191,14 +191,14 @@ public class OpenPgpApi {
     /**
      * This action returns RESULT_CODE_SUCCESS if the OpenPGP Provider already has the key
      * corresponding to the given key id in its database.
-     * <p/>
+     * 
      * It returns RESULT_CODE_USER_INTERACTION_REQUIRED if the Provider does not have the key.
      * The PendingIntent from RESULT_INTENT can be used to retrieve those from a keyserver.
-     * <p/>
+     * 
      * If an Output stream has been defined the whole public key is returned.
      * required extras:
      * long        EXTRA_KEY_ID
-     * <p/>
+     * 
      * optional extras:
      * String      EXTRA_REQUEST_ASCII_ARMOR (request that the returned key is encoded in ASCII Armor)
      */
@@ -209,31 +209,12 @@ public class OpenPgpApi {
      * The encrypted backup will be written to the OutputStream.
      * The client app has no access to the backup code used to encrypt the backup!
      * This operation always requires user interaction with RESULT_CODE_USER_INTERACTION_REQUIRED!
-     * <p/>
+     * 
      * required extras:
      * long[]      EXTRA_KEY_IDS       (keys that should be included in the backup)
      * boolean     EXTRA_BACKUP_SECRET (also backup secret keys)
-     * <p/>
-     * optional extras:
-     * String      EXTRA_REQUEST_ASCII_ARMOR (request that the returned backup is encoded in ASCII Armor)
      */
     public static final String ACTION_BACKUP = "org.openintents.openpgp.action.BACKUP";
-
-    /**
-     * Restore keys given a backup as InputStream.
-     * This operation always requires user interaction with RESULT_CODE_USER_INTERACTION_REQUIRED!
-     *
-     * NOT IMPLEMENTED RIGHT NOW!
-     */
-    private static final String ACTION_RESTORE = "org.openintents.openpgp.action.RESTORE";
-
-    /**
-     * Import keys from InputStream. Only public keys will be imported!
-     *
-     * NOT IMPLEMENTED RIGHT NOW!
-     */
-    private static final String ACTION_IMPORT_KEY = "org.openintents.openpgp.action.IMPORT_KEYS";
-
 
     /* Intent extras */
     public static final String EXTRA_API_VERSION = "api_version";
@@ -385,7 +366,7 @@ public class OpenPgpApi {
 
             Intent result;
 
-            Thread pumpThread =null;
+            Thread pumpThread = null;
             int outputPipeId = 0;
 
             if (os != null) {
