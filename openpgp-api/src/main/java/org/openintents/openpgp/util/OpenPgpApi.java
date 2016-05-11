@@ -16,6 +16,12 @@
 
 package org.openintents.openpgp.util;
 
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -26,11 +32,6 @@ import android.util.Log;
 
 import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class OpenPgpApi {
 
@@ -267,6 +268,8 @@ public class OpenPgpApi {
 
     // DECRYPT_VERIFY
     public static final String EXTRA_DETACHED_SIGNATURE = "detached_signature";
+    public static final String EXTRA_PROGRESS_MESSENGER = "progress_messenger";
+    public static final String EXTRA_DATA_LENGTH = "data_length";
     public static final String EXTRA_DECRYPTION_RESULT_WRAPPER = "decryption_result_wrapper";
     public static final String EXTRA_DECRYPTION_RESULT = "decryption_result";
     public static final String RESULT_SIGNATURE = "signature";
