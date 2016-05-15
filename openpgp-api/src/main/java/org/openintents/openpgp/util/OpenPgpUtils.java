@@ -16,6 +16,7 @@
 
 package org.openintents.openpgp.util;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -74,46 +75,53 @@ public class OpenPgpUtils {
 
     private static final Pattern USER_ID_PATTERN = Pattern.compile("^(.*?)(?: \\((.*)\\))?(?: <(.*)>)?$");
 
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^.*@.*\\..*$");
+
     /**
      * Splits userId string into naming part, email part, and comment part
      * <p/>
      * User ID matching:
      * http://fiddle.re/t4p6f
-     *
-     * @param userId
-     * @return theParsedUserInfo
      */
     public static UserId splitUserId(final String userId) {
         if (!TextUtils.isEmpty(userId)) {
             final Matcher matcher = USER_ID_PATTERN.matcher(userId);
             if (matcher.matches()) {
-                return new UserId(matcher.group(1), matcher.group(3), matcher.group(2));
+                String name = matcher.group(1).isEmpty() ? null : matcher.group(1);
+                String comment = matcher.group(2);
+                String email = matcher.group(3);
+                if (comment == null && email == null && name != null && EMAIL_PATTERN.matcher(name).matches()) {
+                    email = name;
+                    name = null;
+                }
+                return new UserId(name, email, comment);
             }
         }
         return new UserId(null, null, null);
     }
 
     /**
-     * Returns a composed user id. Returns null if name is null!
-     *
-     * @param name
-     * @param email
-     * @param comment
-     * @return
+     * Returns a composed user id. Returns null if name, email and comment are empty.
      */
     public static String createUserId(UserId userId) {
-        String userIdString = userId.name; // consider name a required value
-        if (userIdString != null && !TextUtils.isEmpty(userId.comment)) {
-            userIdString += " (" + userId.comment + ")";
+        StringBuilder userIdBuilder = new StringBuilder();
+        if (!TextUtils.isEmpty(userId.name)) {
+            userIdBuilder.append(userId.name);
         }
-        if (userIdString != null && !TextUtils.isEmpty(userId.email)) {
-            userIdString += " <" + userId.email + ">";
+        if (!TextUtils.isEmpty(userId.comment)) {
+            userIdBuilder.append(" (");
+            userIdBuilder.append(userId.comment);
+            userIdBuilder.append(")");
         }
-
-        return userIdString;
+        if (!TextUtils.isEmpty(userId.email)) {
+            userIdBuilder.append(" <");
+            userIdBuilder.append(userId.email);
+            userIdBuilder.append(">");
+        }
+        return userIdBuilder.length() == 0 ? null : userIdBuilder.toString();
     }
 
-    public static class UserId {
+    public static class UserId implements Serializable {
         public final String name;
         public final String email;
         public final String comment;
