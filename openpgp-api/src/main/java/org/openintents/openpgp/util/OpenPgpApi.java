@@ -206,6 +206,16 @@ public class OpenPgpApi {
     public static final String ACTION_GET_KEY = "org.openintents.openpgp.action.GET_KEY";
 
     /**
+     * This action attempts to decode a public OpenPGP key from the given InputStream and return
+     * information about that key.
+     *
+     * returned extras:
+     * long        RESULT_KEY_ID
+     * String[]    RESULT_USER_IDS
+     */
+    public static final String ACTION_DECODE_PUBLIC_KEY = "org.openintents.openpgp.action.DECODE_PUBLIC_KEY";
+
+    /**
      * Backup all keys given by EXTRA_KEY_IDS and if requested their secret parts.
      * The encrypted backup will be written to the OutputStream.
      * The client app has no access to the backup code used to encrypt the backup!
@@ -277,6 +287,8 @@ public class OpenPgpApi {
     public static final String RESULT_METADATA = "metadata";
     // This will be the charset which was specified in the headers of ascii armored input, if any
     public static final String RESULT_CHARSET = "charset";
+    public static final String RESULT_KEY_ID = "key_id";
+    public static final String RESULT_USER_IDS = "user_ids";
 
     // INTERNAL, must not be used
     public static final String EXTRA_CALL_UUID1 = "call_uuid1";
