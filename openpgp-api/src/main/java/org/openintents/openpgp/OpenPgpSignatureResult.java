@@ -16,12 +16,13 @@
 
 package org.openintents.openpgp;
 
+
+import java.util.ArrayList;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.openintents.openpgp.util.OpenPgpUtils;
-
-import java.util.ArrayList;
 
 public class OpenPgpSignatureResult implements Parcelable {
     /**
@@ -29,7 +30,7 @@ public class OpenPgpSignatureResult implements Parcelable {
      * old versions of the protocol (and thus old versions of this class), we need a versioning
      * system for the parcels sent between the clients and the providers.
      */
-    public static final int PARCELABLE_VERSION = 2;
+    public static final int PARCELABLE_VERSION = 3;
 
     // content not signed
     public static final int RESULT_NO_SIGNATURE = -1;
@@ -48,10 +49,17 @@ public class OpenPgpSignatureResult implements Parcelable {
     // insecure cryptographic algorithms/protocol -> invalid signature!
     public static final int RESULT_INVALID_INSECURE = 6;
 
+    public static final int SENDER_RESULT_NO_SENDER = 0;
+    public static final int SENDER_RESULT_CONFIRMED = 1;
+    public static final int SENDER_RESULT_UNCONFIRMED = 2;
+    public static final int SENDER_RESULT_MISSING = 3;
+
     int result;
     String primaryUserId;
     ArrayList<String> userIds;
+    private ArrayList<String> confirmedUserIds;
     long keyId;
+    int senderResult;
     @Deprecated
     boolean signatureOnly;
 
@@ -89,6 +97,18 @@ public class OpenPgpSignatureResult implements Parcelable {
         this.userIds = userIds;
     }
 
+    public ArrayList<String> getConfirmedUserIds() {
+        return confirmedUserIds;
+    }
+
+    public void setConfirmedUserIds(ArrayList<String> confirmedUserIds) {
+        this.confirmedUserIds = confirmedUserIds;
+    }
+
+    public void setSenderResult(int senderResult) {
+        this.senderResult = senderResult;
+    }
+
     public long getKeyId() {
         return keyId;
     }
@@ -102,12 +122,13 @@ public class OpenPgpSignatureResult implements Parcelable {
     }
 
     public OpenPgpSignatureResult(int signatureStatus, String signatureUserId,
-                                  boolean signatureOnly, long keyId, ArrayList<String> userIds) {
+                                  boolean signatureOnly, long keyId, ArrayList<String> userIds, int senderResult) {
         this.result = signatureStatus;
         this.signatureOnly = signatureOnly;
         this.primaryUserId = signatureUserId;
         this.keyId = keyId;
         this.userIds = userIds;
+        this.senderResult = senderResult;
     }
 
     public OpenPgpSignatureResult(OpenPgpSignatureResult b) {
@@ -140,6 +161,9 @@ public class OpenPgpSignatureResult implements Parcelable {
         dest.writeLong(keyId);
         // version 2
         dest.writeStringList(userIds);
+        // version 3
+        dest.writeInt(senderResult);
+        dest.writeStringList(confirmedUserIds);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
         dest.setDataPosition(sizePosition);
@@ -149,7 +173,7 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     public static final Creator<OpenPgpSignatureResult> CREATOR = new Creator<OpenPgpSignatureResult>() {
         public OpenPgpSignatureResult createFromParcel(final Parcel source) {
-            source.readInt(); // parcelableVersion
+            int version = source.readInt(); // parcelableVersion
             int parcelableSize = source.readInt();
             int startPosition = source.dataPosition();
 
@@ -158,8 +182,14 @@ public class OpenPgpSignatureResult implements Parcelable {
             vr.signatureOnly = source.readByte() == 1;
             vr.primaryUserId = source.readString();
             vr.keyId = source.readLong();
-            vr.userIds = new ArrayList<String>();
-            source.readStringList(vr.userIds);
+
+            if (version > 1) {
+                vr.userIds = source.createStringArrayList();
+            }
+            if (version > 2) {
+                vr.senderResult = source.readInt();
+                vr.confirmedUserIds = source.createStringArrayList();
+            }
 
             // skip over all fields added in future versions of this parcel
             source.setDataPosition(startPosition + parcelableSize);
@@ -181,5 +211,4 @@ public class OpenPgpSignatureResult implements Parcelable {
         out += "\nkeyId: " + OpenPgpUtils.convertKeyIdToHex(keyId);
         return out;
     }
-
 }
