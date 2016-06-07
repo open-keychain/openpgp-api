@@ -40,22 +40,28 @@ public class OpenPgpSignatureResult implements Parcelable {
     // invalid signature!
     public static final int RESULT_INVALID_SIGNATURE = 0;
     // successfully verified signature, with confirmed key
+    @Deprecated
     public static final int RESULT_VALID_CONFIRMED = 1;
+    public static final int RESULT_VALID_KEY_CONFIRMED = 1;
     // no key was found for this signature verification
     public static final int RESULT_KEY_MISSING = 2;
     // successfully verified signature, but with unconfirmed key
+    @Deprecated
     public static final int RESULT_VALID_UNCONFIRMED = 3;
+    public static final int RESULT_VALID_KEY_UNCONFIRMED = 3;
     // key has been revoked -> invalid signature!
     public static final int RESULT_INVALID_KEY_REVOKED = 4;
     // key is expired -> invalid signature!
     public static final int RESULT_INVALID_KEY_EXPIRED = 5;
     // insecure cryptographic algorithms/protocol -> invalid signature!
+    @Deprecated
     public static final int RESULT_INVALID_INSECURE = 6;
+    public static final int RESULT_INVALID_KEY_INSECURE = 6;
 
     public static final int SENDER_RESULT_NO_SENDER = 0;
-    public static final int SENDER_RESULT_CONFIRMED = 1;
-    public static final int SENDER_RESULT_UNCONFIRMED = 2;
-    public static final int SENDER_RESULT_MISSING = 3;
+    public static final int SENDER_RESULT_UID_CONFIRMED = 1;
+    public static final int SENDER_RESULT_UID_UNCONFIRMED = 2;
+    public static final int SENDER_RESULT_UID_MISSING = 3;
 
     private final int result;
     private final long keyId;
@@ -63,8 +69,6 @@ public class OpenPgpSignatureResult implements Parcelable {
     private final ArrayList<String> userIds;
     private final ArrayList<String> confirmedUserIds;
     private final int senderResult;
-    @Deprecated
-    private final Boolean signatureOnly;
 
     private OpenPgpSignatureResult(int signatureStatus, String signatureUserId, long keyId,
             ArrayList<String> userIds, ArrayList<String> confirmedUserIds, int senderResult, Boolean signatureOnly) {
@@ -74,12 +78,12 @@ public class OpenPgpSignatureResult implements Parcelable {
         this.userIds = userIds;
         this.confirmedUserIds = confirmedUserIds;
         this.senderResult = senderResult;
-        this.signatureOnly = signatureOnly;
     }
 
     private OpenPgpSignatureResult(Parcel source, int version) {
         this.result = source.readInt();
-        Boolean signatureOnly = source.readByte() != 0;
+        // we dropped support for signatureOnly, but need to skip the value for compatibility
+        source.readByte();
         this.primaryUserId = source.readString();
         this.keyId = source.readLong();
 
@@ -91,19 +95,18 @@ public class OpenPgpSignatureResult implements Parcelable {
         if (version > 2) {
             this.senderResult = source.readInt();
             this.confirmedUserIds = source.createStringArrayList();
-            if (source.readInt() == 0) {
-                signatureOnly = null;
-            }
         } else {
             this.senderResult = SENDER_RESULT_NO_SENDER;
             this.confirmedUserIds = null;
         }
-
-        this.signatureOnly = signatureOnly;
     }
 
     public int getResult() {
         return result;
+    }
+
+    public int getSenderResult() {
+        return senderResult;
     }
 
     public String getPrimaryUserId() {
@@ -120,12 +123,6 @@ public class OpenPgpSignatureResult implements Parcelable {
 
     public long getKeyId() {
         return keyId;
-    }
-
-    @Deprecated
-    public boolean isSignatureOnly() {
-        // TODO throw if signatureOnly is null? This method might contain misleading data otherwise!
-        return signatureOnly != null && signatureOnly;
     }
 
     public int describeContents() {
@@ -145,7 +142,8 @@ public class OpenPgpSignatureResult implements Parcelable {
         int startPosition = dest.dataPosition();
         // version 1
         dest.writeInt(result);
-        dest.writeByte((byte) (signatureOnly != null && signatureOnly ? 1 : 0));
+        // signatureOnly is deprecated since version 3. we pass a dummy value for compatibility
+        dest.writeByte((byte) 0);
         dest.writeString(primaryUserId);
         dest.writeLong(keyId);
         // version 2
@@ -153,8 +151,6 @@ public class OpenPgpSignatureResult implements Parcelable {
         // version 3
         dest.writeInt(senderResult);
         dest.writeStringList(confirmedUserIds);
-        // we can't change the value of version 1, but we still want to remember whether this was actually set
-        dest.writeInt(signatureOnly != null ? 1 : 0);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
         dest.setDataPosition(sizePosition);
