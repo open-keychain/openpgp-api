@@ -275,6 +275,7 @@ public class OpenPgpApi {
     public static final String EXTRA_DECRYPTION_RESULT = "decryption_result";
     public static final String EXTRA_SENDER_ADDRESS = "sender_address";
     public static final String EXTRA_SUPPORT_OVERRIDE_CRYPTO_WARNING = "support_override_crpto_warning";
+    public static final String EXTRA_TRUST_IDENTITY = "trust_identity";
     public static final String RESULT_SIGNATURE = "signature";
     public static final String RESULT_DECRYPTION = "decryption";
     public static final String RESULT_METADATA = "metadata";
