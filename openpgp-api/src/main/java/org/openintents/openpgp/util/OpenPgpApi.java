@@ -247,6 +247,8 @@ public class OpenPgpApi {
 
     // GET_KEY
     public static final String EXTRA_KEY_ID = "key_id";
+    public static final String EXTRA_MINIMIZE = "minimize";
+    public static final String EXTRA_MINIMIZE_USER_ID = "minimize_user_id";
     public static final String RESULT_KEY_IDS = "key_ids";
 
     // BACKUP
