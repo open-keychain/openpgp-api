@@ -135,6 +135,8 @@ public class OpenPgpApi {
      */
     public static final String ACTION_SIGN_AND_ENCRYPT = "org.openintents.openpgp.action.SIGN_AND_ENCRYPT";
 
+    public static final String ACTION_QUERY_AUTOCRYPT_STATUS = "org.openintents.openpgp.action.QUERY_AUTOCRYPT_STATUS";
+
     /**
      * Decrypts and verifies given input stream. This methods handles encrypted-only, signed-and-encrypted,
      * and also signed-only input.
@@ -217,6 +219,8 @@ public class OpenPgpApi {
      */
     public static final String ACTION_BACKUP = "org.openintents.openpgp.action.BACKUP";
 
+    public static final String ACTION_UPDATE_AUTOCRYPT_PEER = "org.openintents.openpgp.action.UPDATE_AUTOCRYPT_PEER";
+
     /* Intent extras */
     public static final String EXTRA_API_VERSION = "api_version";
 
@@ -229,13 +233,18 @@ public class OpenPgpApi {
     public static final String RESULT_DETACHED_SIGNATURE = "detached_signature";
     public static final String RESULT_SIGNATURE_MICALG = "signature_micalg";
 
-    // ENCRYPT, SIGN_AND_ENCRYPT
+    // ENCRYPT, SIGN_AND_ENCRYPT, QUERY_AUTOCRYPT_STATUS
     public static final String EXTRA_USER_IDS = "user_ids";
     public static final String EXTRA_KEY_IDS = "key_ids";
     public static final String EXTRA_KEY_IDS_SELECTED = "key_ids_selected";
     public static final String EXTRA_SIGN_KEY_ID = "sign_key_id";
-    public static final String EXTRA_DRY_RUN = "dry_run";
-    public static final String RESULT_KEYS_CONFIRMED = "keys_confirmed";
+
+    public static final String RESULT_AUTOCRYPT_STATUS = "autocrypt_status";
+    public static final int AUTOCRYPT_STATUS_UNAVAILABLE = 0;
+    public static final int AUTOCRYPT_STATUS_DISCOURAGE = 1;
+    public static final int AUTOCRYPT_STATUS_AVAILABLE = 2;
+    public static final int AUTOCRYPT_STATUS_MUTUAL = 3;
+
     // optional extras:
     public static final String EXTRA_PASSPHRASE = "passphrase";
     public static final String EXTRA_ORIGINAL_FILENAME = "original_filename";
@@ -275,7 +284,8 @@ public class OpenPgpApi {
     public static final String EXTRA_DECRYPTION_RESULT = "decryption_result";
     public static final String EXTRA_SENDER_ADDRESS = "sender_address";
     public static final String EXTRA_SUPPORT_OVERRIDE_CRYPTO_WARNING = "support_override_crpto_warning";
-    public static final String EXTRA_TRUST_IDENTITY = "trust_identity";
+    public static final String EXTRA_AUTOCRYPT_PEER_ID = "autocrypt_peer_id";
+    public static final String EXTRA_AUTOCRYPT_PEER_UPDATE = "autocrypt_peer_update";
     public static final String RESULT_SIGNATURE = "signature";
     public static final String RESULT_DECRYPTION = "decryption";
     public static final String RESULT_METADATA = "metadata";
