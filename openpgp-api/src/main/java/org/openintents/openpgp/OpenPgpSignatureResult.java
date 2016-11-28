@@ -60,11 +60,11 @@ public class OpenPgpSignatureResult implements Parcelable {
     private final ArrayList<String> confirmedUserIds;
     private final SenderStatusResult senderStatusResult;
     private final Date signatureTimestamp;
-    private final TrustIdentityResult trustIdentityResult;
+    private final AutocryptPeerResult autocryptPeerentityResult;
 
     private OpenPgpSignatureResult(int signatureStatus, String signatureUserId, long keyId,
             ArrayList<String> userIds, ArrayList<String> confirmedUserIds, SenderStatusResult senderStatusResult,
-            Boolean signatureOnly, Date signatureTimestamp, TrustIdentityResult trustIdentityResult) {
+            Boolean signatureOnly, Date signatureTimestamp, AutocryptPeerResult autocryptPeerentityResult) {
         this.result = signatureStatus;
         this.primaryUserId = signatureUserId;
         this.keyId = keyId;
@@ -72,7 +72,7 @@ public class OpenPgpSignatureResult implements Parcelable {
         this.confirmedUserIds = confirmedUserIds;
         this.senderStatusResult = senderStatusResult;
         this.signatureTimestamp = signatureTimestamp;
-        this.trustIdentityResult = trustIdentityResult;
+        this.autocryptPeerentityResult = autocryptPeerentityResult;
     }
 
     private OpenPgpSignatureResult(Parcel source, int version) {
@@ -104,9 +104,9 @@ public class OpenPgpSignatureResult implements Parcelable {
         }
 
         if (version > 4) {
-            this.trustIdentityResult = readEnumWithNullAndFallback(source, TrustIdentityResult.values, null);
+            this.autocryptPeerentityResult = readEnumWithNullAndFallback(source, AutocryptPeerResult.values, null);
         } else {
-            this.trustIdentityResult = null;
+            this.autocryptPeerentityResult = null;
         }
     }
 
@@ -172,7 +172,7 @@ public class OpenPgpSignatureResult implements Parcelable {
             dest.writeInt(0);
         }
         // version 5
-        writeEnumWithNull(dest, trustIdentityResult);
+        writeEnumWithNull(dest, autocryptPeerentityResult);
         // Go back and write the size
         int parcelableSize = dest.dataPosition() - startPosition;
         dest.setDataPosition(sizePosition);
@@ -234,13 +234,13 @@ public class OpenPgpSignatureResult implements Parcelable {
     @Deprecated
     public OpenPgpSignatureResult withSignatureOnlyFlag(boolean signatureOnly) {
         return new OpenPgpSignatureResult(result, primaryUserId, keyId, userIds, confirmedUserIds,
-                senderStatusResult, signatureOnly, signatureTimestamp, trustIdentityResult);
+                senderStatusResult, signatureOnly, signatureTimestamp, autocryptPeerentityResult);
     }
 
-    public OpenPgpSignatureResult withTrustIdentityResult(TrustIdentityResult trustIdentityResult) {
+    public OpenPgpSignatureResult withAutocryptPeerResult(AutocryptPeerResult autocryptPeerentityResult) {
         return new OpenPgpSignatureResult(
                 result, primaryUserId, keyId, userIds, confirmedUserIds,
-                senderStatusResult, null, signatureTimestamp, trustIdentityResult);
+                senderStatusResult, null, signatureTimestamp, autocryptPeerentityResult);
     }
 
     private static <T extends Enum<T>> T readEnumWithNullAndFallback(Parcel source, T[] enumValues, T fallback) {
@@ -267,8 +267,8 @@ public class OpenPgpSignatureResult implements Parcelable {
         public static final SenderStatusResult[] values = values();
     }
 
-    public enum TrustIdentityResult {
+    public enum AutocryptPeerResult {
         OK, NEW, MISMATCH;
-        public static final TrustIdentityResult[] values = values();
+        public static final AutocryptPeerResult[] values = values();
     }
 }
