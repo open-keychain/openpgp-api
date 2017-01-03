@@ -235,6 +235,7 @@ public class OpenPgpApi {
     // ENCRYPT, SIGN_AND_ENCRYPT
     public static final String EXTRA_USER_IDS = "user_ids";
     public static final String EXTRA_KEY_IDS = "key_ids";
+    public static final String EXTRA_KEY_IDS_SELECTED = "key_ids_selected";
     public static final String EXTRA_SIGN_KEY_ID = "sign_key_id";
     // optional extras:
     public static final String EXTRA_PASSPHRASE = "passphrase";
