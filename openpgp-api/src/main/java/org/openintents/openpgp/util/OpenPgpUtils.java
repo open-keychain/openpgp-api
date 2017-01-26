@@ -75,13 +75,11 @@ public class OpenPgpUtils {
 
     private static final Pattern USER_ID_PATTERN = Pattern.compile("^(.*?)(?: \\((.*)\\))?(?: <(.*)>)?$");
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^.*@.*\\..*$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^<?\"?([^<>\"]*@[^<>\"]*\\.[^<>\"]*)\"?>?$");
 
     /**
-     * Splits userId string into naming part, email part, and comment part
-     * <p/>
-     * User ID matching:
-     * http://fiddle.re/t4p6f
+     * Splits userId string into naming part, email part, and comment part.
+     * See SplitUserIdTest for examples.
      */
     public static UserId splitUserId(final String userId) {
         if (!TextUtils.isEmpty(userId)) {
@@ -90,9 +88,19 @@ public class OpenPgpUtils {
                 String name = matcher.group(1).isEmpty() ? null : matcher.group(1);
                 String comment = matcher.group(2);
                 String email = matcher.group(3);
-                if (comment == null && email == null && name != null && EMAIL_PATTERN.matcher(name).matches()) {
-                    email = name;
-                    name = null;
+                if (email != null && name != null) {
+                    final Matcher emailMatcher = EMAIL_PATTERN.matcher(name);
+                    if (emailMatcher.matches() && email.equals(emailMatcher.group(1))) {
+                        email = emailMatcher.group(1);
+                        name = null;
+                    }
+                }
+                if (email == null && name != null) {
+                    final Matcher emailMatcher = EMAIL_PATTERN.matcher(name);
+                    if (emailMatcher.matches()) {
+                        email = emailMatcher.group(1);
+                        name = null;
+                    }
                 }
                 return new UserId(name, email, comment);
             }
