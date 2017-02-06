@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:openpgp-api:11.0'
+    compile 'org.sufficientlysecure:openpgp-api:12.0'
 }
 ```
 
