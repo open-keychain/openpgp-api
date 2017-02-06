@@ -1,5 +1,14 @@
 # Version history
 
+## Version 12
+  * OpenPgpDecryptionResult and OpenPgpSignatureResult are now immutable
+  * Added PROGRESS_MESSENGER and DATA_LENGTH extras for ACTION_DECRYPT_VERIFY. This allows to the client app to get periodic updates for displaying a progress bar on decryption.
+  * Added ACTION_BACKUP
+  * Added special API calls for better K-9 Mail integration:  
+    Check for sender address matching with EXTRA_SENDER_ADDRESS and result in OpenPgpSignatureResult  
+    Opportunistic encryption mode with EXTRA_OPPORTUNISTIC_ENCRYPTION  
+    There is an external ContentProvider at org.sufficientlysecure.keychain.provider.exported for querying available keys (CAUTION: This API is not final!)
+
 ## Version 11
   * Added a simple no-op to check if the api is available and app has permission as ACTION_CHECK_PERMISSON
   * The ACTION_DETACHED_SIGN action now returns RESULT_SIGNATURE_MICALG, which contains the algorithm name used for signing (relevant for PGP/MIME)
