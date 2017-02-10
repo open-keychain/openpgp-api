@@ -47,7 +47,7 @@ A full working example is available in the [example project](https://github.com/
 The API is **not** designed around ``Intents`` which are started via ``startActivityForResult``. These Intent actions typically start an activity for user interaction, so they are not suitable for background tasks. Most API design decisions are explained at [the bottom of this wiki page](https://github.com/open-keychain/open-keychain/wiki/OpenPGP-API#internal-design-decisions).
 
 We will go through the basic steps to understand how this API works, following this (greatly simplified) sequence diagram:
-![](https://github.com/open-keychain/open-keychain/raw/master/Resources/docs/openpgp_api_1.jpg)
+![](https://github.com/open-keychain/open-keychain/raw/master/resources/docs/openpgp_api_1.jpg)
 
 In this diagram the client app is depicted on the left side, the OpenPGP provider (in this case OpenKeychain) is depicted on the right.
 The remote service is defined via the [AIDL](http://developer.android.com/guide/components/aidl.html) file [``IOpenPgpService``](https://github.com/open-keychain/openpgp-api/blob/master/openpgp-api/src/main/aidl/org/openintents/openpgp/IOpenPgpService.aidl).
