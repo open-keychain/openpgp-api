@@ -80,21 +80,21 @@ Following the sequence diagram, these steps are executed:
 
 1.  Define an ``Intent`` containing the actual PGP instructions which should be done, e.g.
     ```java
-Intent data = new Intent();
-data.setAction(OpenPgpApi.ACTION_ENCRYPT);
-data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{"dominik@dominikschuermann.de"});
-data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+    Intent data = new Intent();
+    data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+    data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{"dominik@dominikschuermann.de"});
+    data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
     ```
     Define an ``InputStream`` currently holding the plaintext, and an ``OutputStream`` where you want the ciphertext to be written by OpenKeychain's remote service:
     ```java
-InputStream is = new ByteArrayInputStream("Hello world!".getBytes("UTF-8"));
-ByteArrayOutputStream os = new ByteArrayOutputStream();
+    InputStream is = new ByteArrayInputStream("Hello world!".getBytes("UTF-8"));
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
     ```
     Using a helper class from the library, ``is`` and ``os`` are passed via ``ParcelFileDescriptors`` as ``input`` and ``output`` together with ``Intent data``, as depicted in the sequence diagram, from the client to the remote service.
     Programmatically, this can be done with:
     ```java
-OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-Intent result = api.executeApi(data, is, os);
+    OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+    Intent result = api.executeApi(data, is, os);
     ```
 
 2.  The PGP operation is executed by OpenKeychain and the produced ciphertext is written into ``os`` which can then be accessed by the client app.
