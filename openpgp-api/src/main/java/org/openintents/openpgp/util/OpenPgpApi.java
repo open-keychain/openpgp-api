@@ -239,6 +239,7 @@ public class OpenPgpApi {
     public static final String EXTRA_KEY_IDS_SELECTED = "key_ids_selected";
     public static final String EXTRA_SIGN_KEY_ID = "sign_key_id";
 
+    public static final String RESULT_KEYS_CONFIRMED = "keys_confirmed";
     public static final String RESULT_AUTOCRYPT_STATUS = "autocrypt_status";
     public static final int AUTOCRYPT_STATUS_UNAVAILABLE = 0;
     public static final int AUTOCRYPT_STATUS_DISCOURAGE = 1;
