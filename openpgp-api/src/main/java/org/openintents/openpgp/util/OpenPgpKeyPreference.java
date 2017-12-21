@@ -39,7 +39,7 @@ public class OpenPgpKeyPreference extends Preference {
     private OpenPgpServiceConnection mServiceConnection;
     private String mDefaultUserId;
 
-    public static final int REQUEST_CODE_KEY_PREFERENCE = 9999;
+    private int requestCodeKeyPreference = 9999;
 
     private static final int NO_KEY = 0;
 
@@ -69,6 +69,14 @@ public class OpenPgpKeyPreference extends Preference {
     public void setDefaultUserId(String userId) {
         mDefaultUserId = userId;
     }
+    
+    public int getIntentRequestCode() {
+        return requestCodeKeyPreference;
+    }
+    
+    public void setIntentRequestCode(int requestCode) {
+        requestCodeKeyPreference = requestCode;
+    }
 
     @Override
     protected void onClick() {
@@ -97,7 +105,7 @@ public class OpenPgpKeyPreference extends Preference {
         data.putExtra(OpenPgpApi.EXTRA_USER_ID, mDefaultUserId);
 
         OpenPgpApi api = new OpenPgpApi(getContext(), mServiceConnection.getService());
-        api.executeApiAsync(data, null, null, new MyCallback(REQUEST_CODE_KEY_PREFERENCE));
+        api.executeApiAsync(data, null, null, new MyCallback(requestCodeKeyPreference));
     }
 
     private class MyCallback implements OpenPgpApi.IOpenPgpCallback {
@@ -282,7 +290,7 @@ public class OpenPgpKeyPreference extends Preference {
     }
 
     public boolean handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_KEY_PREFERENCE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == requestCodeKeyPreference && resultCode == Activity.RESULT_OK) {
             getSignKeyId(data);
             return true;
         } else {
