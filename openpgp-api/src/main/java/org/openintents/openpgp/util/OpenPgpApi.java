@@ -287,6 +287,7 @@ public class OpenPgpApi {
     public static final String EXTRA_SUPPORT_OVERRIDE_CRYPTO_WARNING = "support_override_crpto_warning";
     public static final String EXTRA_AUTOCRYPT_PEER_ID = "autocrypt_peer_id";
     public static final String EXTRA_AUTOCRYPT_PEER_UPDATE = "autocrypt_peer_update";
+    public static final String EXTRA_AUTOCRYPT_PEER_GOSSIP_UPDATES = "autocrypt_peer_gossip_updates";
     public static final String RESULT_SIGNATURE = "signature";
     public static final String RESULT_DECRYPTION = "decryption";
     public static final String RESULT_METADATA = "metadata";
