@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="define_OpenPGPAPILibrary"></string>
+    <string name="library_OpenPGPAPILibrary_author">Dominik Schürmann</string>
+    <string name="library_OpenPGPAPILibrary_authorWebsite">https://www.schuermann.eu/</string>
+    <string name="library_OpenPGPAPILibrary_libraryName">OpenPGP API library</string>
+    <string name="library_OpenPGPAPILibrary_libraryDescription">The OpenPGP API provides methods to
+        execute OpenPGP operations, such as sign, encrypt, decrypt, verify, and more without user
+        interaction from background threads. This is done by connecting your client application to a
+        remote service provided by OpenKeychain or other OpenPGP providers.</string>
+    <string name="library_OpenPGPAPILibrary_libraryVersion">12</string>
+    <string name="library_OpenPGPAPILibrary_libraryWebsite">https://www.openkeychain.org/</string>
+    <string name="library_OpenPGPAPILibrary_licenseId">apache_2_0</string>
+    <string name="library_OpenPGPAPILibrary_isOpenSource">true</string>
+    <string name="library_OpenPGPAPILibrary_repositoryLink">https://github.com/open-keychain/openpgp-api/</string>
+</resources>
