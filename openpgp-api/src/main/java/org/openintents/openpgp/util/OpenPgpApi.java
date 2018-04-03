@@ -179,6 +179,7 @@ public class OpenPgpApi {
      * long        EXTRA_SIGN_KEY_ID
      */
     public static final String ACTION_GET_SIGN_KEY_ID = "org.openintents.openpgp.action.GET_SIGN_KEY_ID";
+    public static final String ACTION_GET_SIGN_KEY_ID_LEGACY = "org.openintents.openpgp.action.GET_SIGN_KEY_ID_LEGACY";
 
     /**
      * Get key ids based on given user ids (=emails)
@@ -254,6 +255,12 @@ public class OpenPgpApi {
 
     // GET_SIGN_KEY_ID
     public static final String EXTRA_USER_ID = "user_id";
+    public static final String EXTRA_PRESELECT_KEY_ID = "preselect_key_id";
+    public static final String EXTRA_SHOW_AUTOCRYPT_HINT = "show_autocrypt_hint";
+
+    public static final String RESULT_SIGN_KEY_ID = "sign_key_id";
+    public static final String RESULT_PRIMARY_USER_ID = "primary_user_id";
+    public static final String RESULT_KEY_CREATION_TIME = "key_creation_time";
 
     // GET_KEY
     public static final String EXTRA_KEY_ID = "key_id";
