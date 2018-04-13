@@ -271,6 +271,8 @@ public class OpenPgpApi {
     // BACKUP
     public static final String EXTRA_BACKUP_SECRET = "backup_secret";
 
+    public static final String ACTION_AUTOCRYPT_KEY_TRANSFER = "autocrypt_key_transfer";
+
     /* Service Intent returns */
     public static final String RESULT_CODE = "result_code";
 
