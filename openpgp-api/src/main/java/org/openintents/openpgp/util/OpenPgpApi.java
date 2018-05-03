@@ -252,6 +252,7 @@ public class OpenPgpApi {
     public static final String EXTRA_ORIGINAL_FILENAME = "original_filename";
     public static final String EXTRA_ENABLE_COMPRESSION = "enable_compression";
     public static final String EXTRA_OPPORTUNISTIC_ENCRYPTION = "opportunistic";
+    public static final String EXTRA_CUSTOM_HEADERS = "custom_headers";
 
     // GET_SIGN_KEY_ID
     public static final String EXTRA_USER_ID = "user_id";
