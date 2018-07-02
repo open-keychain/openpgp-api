@@ -17,7 +17,6 @@
 package org.openintents.openpgp;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +55,14 @@ public class OpenPgpSignatureResult implements Parcelable {
     private final int result;
     private final long keyId;
     private final String primaryUserId;
-    private final ArrayList<String> userIds;
-    private final ArrayList<String> confirmedUserIds;
+    private final List<String> userIds;
+    private final List<String> confirmedUserIds;
     private final SenderStatusResult senderStatusResult;
     private final Date signatureTimestamp;
     private final AutocryptPeerResult autocryptPeerentityResult;
 
     private OpenPgpSignatureResult(int signatureStatus, String signatureUserId, long keyId,
-            ArrayList<String> userIds, ArrayList<String> confirmedUserIds, SenderStatusResult senderStatusResult,
+            List<String> userIds, List<String> confirmedUserIds, SenderStatusResult senderStatusResult,
             Boolean signatureOnly, Date signatureTimestamp, AutocryptPeerResult autocryptPeerentityResult) {
         this.result = signatureStatus;
         this.primaryUserId = signatureUserId;
@@ -209,7 +208,7 @@ public class OpenPgpSignatureResult implements Parcelable {
     }
 
     public static OpenPgpSignatureResult createWithValidSignature(int signatureStatus, String primaryUserId,
-            long keyId, ArrayList<String> userIds, ArrayList<String> confirmedUserIds,
+            long keyId, List<String> userIds, List<String> confirmedUserIds,
             SenderStatusResult senderStatusResult, Date signatureTimestamp) {
         if (signatureStatus == RESULT_NO_SIGNATURE || signatureStatus == RESULT_KEY_MISSING ||
                 signatureStatus == RESULT_INVALID_SIGNATURE) {
