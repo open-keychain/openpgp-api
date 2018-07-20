@@ -51,6 +51,8 @@ public class OpenPgpSignatureResult implements Parcelable {
     public static final int RESULT_INVALID_KEY_EXPIRED = 5;
     // insecure cryptographic algorithms/protocol -> invalid signature!
     public static final int RESULT_INVALID_KEY_INSECURE = 6;
+    // data wasn't encrypted to recipient intended in signature
+    public static final int RESULT_INVALID_NOT_INTENDED_RECIPIENT = 7;
 
     private final int result;
     private final long keyId;
