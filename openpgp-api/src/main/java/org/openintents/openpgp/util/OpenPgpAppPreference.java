@@ -98,8 +98,8 @@ public class OpenPgpAppPreference extends DialogPreference {
                 android.R.layout.select_dialog_singlechoice, android.R.id.text1, mList) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 // User super class to create the View
-                View v = super.getView(position, convertView, parent);
-                TextView tv = (TextView) v.findViewById(android.R.id.text1);
+                View view = super.getView(position, convertView, parent);
+                TextView tv = view.findViewById(android.R.id.text1);
 
                 // Put the image on the TextView
                 tv.setCompoundDrawablesWithIntrinsicBounds(mList.get(position).icon, null,
@@ -109,7 +109,7 @@ public class OpenPgpAppPreference extends DialogPreference {
                 int dp10 = (int) (10 * getContext().getResources().getDisplayMetrics().density + 0.5f);
                 tv.setCompoundDrawablePadding(dp10);
 
-                return v;
+                return view;
             }
         };
 

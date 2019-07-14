@@ -69,11 +69,11 @@ public class OpenPgpKeyPreference extends Preference {
     public void setDefaultUserId(String userId) {
         mDefaultUserId = userId;
     }
-    
+
     public int getIntentRequestCode() {
         return requestCodeKeyPreference;
     }
-    
+
     public void setIntentRequestCode(int requestCode) {
         requestCodeKeyPreference = requestCode;
     }

@@ -77,9 +77,9 @@ public class AutocryptPeerUpdate implements Parcelable {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        /**
-         * NOTE: When adding fields in the process of updating this API, make sure to bump
-         * {@link #PARCELABLE_VERSION}.
+        /*
+          NOTE: When adding fields in the process of updating this API, make sure to bump
+          {@link #PARCELABLE_VERSION}.
          */
         dest.writeInt(PARCELABLE_VERSION);
         // Inject a placeholder that will store the parcel size from this point on
@@ -126,6 +126,6 @@ public class AutocryptPeerUpdate implements Parcelable {
     };
 
     public enum PreferEncrypt {
-        NOPREFERENCE, MUTUAL;
+        NOPREFERENCE, MUTUAL
     }
 }
