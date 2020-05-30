@@ -1,17 +1,16 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile 'com.android.support:support-v4:23.3.0'
-    compile project(':openpgp-api')
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation project(':openpgp-api')
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 28
         applicationId 'org.openintents.openpgp.example'
         versionCode 6
         versionName '7.0'
