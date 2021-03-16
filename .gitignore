@@ -12,7 +12,6 @@ ant.properties
 #Gradle
 .gradle
 build
-gradle.properties
 
 #Maven
 target
