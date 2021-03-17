@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 28
 
     defaultConfig {
         versionCode 9
-        versionName '13.0' // API-Version . minor
+        versionName '13.1' // API-Version . minor
         minSdkVersion 9
         targetSdkVersion 28
     }
@@ -16,11 +16,43 @@ android {
     }
 }
 
-publish {
-    userOrg = 'sufficientlysecure'
-    groupId = 'org.sufficientlysecure'
-    artifactId = 'openpgp-api'
-    version = '13.0'
-    description = 'The OpenPGP API provides methods to execute OpenPGP operations, such as sign, encrypt, decrypt, verify, and more without user interaction from background threads.'
-    website = 'https://github.com/open-keychain/openpgp-api'
+// https://developer.android.com/studio/build/maven-publish-plugin
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'org.sufficientlysecure'
+                artifactId = 'openpgp-api'
+                version = android.defaultConfig.versionName
+
+                pom {
+                    url = 'https://github.com/open-keychain'
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution = 'repo'
+                        }
+                    }
+                    organization {
+                        name = 'Confidential Technologies GmbH'
+                        url = 'https://www.cotech.de'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = "https://maven.pkg.github.com/open-keychain/open-keychain"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
 }
