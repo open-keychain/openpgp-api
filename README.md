@@ -25,13 +25,14 @@ Add this to your build.gradle:
 
 ```gradle
 repositories {
-    jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:openpgp-api:12.0'
+    implementation 'com.github.open-keychain.open-keychain:openpgp-api:-SNAPSHOT'
 }
 ```
+
 
 ### Full example
 A full working example is available in the [example project](https://github.com/open-keychain/openpgp-api/blob/master/example). The [``OpenPgpApiActivity.java``](https://github.com/open-keychain/openpgp-api/blob/master/example/src/main/java/org/openintents/openpgp/example/OpenPgpApiActivity.java) contains most relevant sourcecode.
