@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.open-keychain.open-keychain:openpgp-api:v5.7'
+    implementation 'com.github.open-keychain.open-keychain:openpgp-api:v5.7.1'
 }
 ```
 
