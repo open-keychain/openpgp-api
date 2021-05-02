@@ -75,7 +75,7 @@ public class OpenPgpUtils {
 
     private static final Pattern USER_ID_PATTERN = Pattern.compile("^(.*?)(?: \\((.*)\\))?(?: <(.*)>)?$");
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^<?\"?([^<>\"]*@[^<>\"]*\\.[^<>\"]*)\"?>?$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^<?\"?([^<>\"]*@[^<>\"]*[.]?[^<>\"]*)\"?>?$");
 
     /**
      * Splits userId string into naming part, email part, and comment part.
