@@ -204,7 +204,7 @@ public class OpenPgpApi {
      * long        EXTRA_KEY_ID
      * 
      * optional extras:
-     * String      EXTRA_REQUEST_ASCII_ARMOR (request that the returned key is encoded in ASCII Armor)
+     * bool        EXTRA_REQUEST_ASCII_ARMOR (request that the returned key is encoded in ASCII Armor)
      */
     public static final String ACTION_GET_KEY = "org.openintents.openpgp.action.GET_KEY";
 
