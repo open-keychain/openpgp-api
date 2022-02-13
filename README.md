@@ -30,7 +30,7 @@ allprojects {                                                                   
 }                                                                                                                                                                                                                  
                                                                                                          
 dependencies {
-        implementation 'com.github.open-keychain:openpgp-api:v10'
+        implementation 'com.github.open-keychain:openpgp-api:v11'
 }
 ```
 
