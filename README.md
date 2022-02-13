@@ -24,12 +24,13 @@ Thus, you are allowed to also use it in closed source applications as long as yo
 Add this to your build.gradle:
 
 ```gradle
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
+allprojects {                                                                                                                                                                                                              repositories {                                                                                   
+                ...                            
+                maven { url 'https://jitpack.io' }                                                                                                                                                                         }        
+}                                                                                                                                                                                                                  
+                                                                                                         
 dependencies {
-    implementation 'com.github.open-keychain.open-keychain:openpgp-api:v5.7.1'
+        implementation 'com.github.open-keychain:openpgp-api:v10'
 }
 ```
 
