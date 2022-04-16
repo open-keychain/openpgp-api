@@ -9,10 +9,10 @@ android {
         minSdkVersion 9
         targetSdkVersion 31
     }
-
-    lintOptions {
+    lint {
         abortOnError false
     }
+
 }
 
 // https://developer.android.com/studio/build/maven-publish-plugin
