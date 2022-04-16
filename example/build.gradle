@@ -6,18 +6,17 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 31
         applicationId 'org.openintents.openpgp.example'
         versionCode 6
         versionName '7.0'
     }
-
-    // Do not abort build if lint finds errors
-    lintOptions {
+    lint {
         abortOnError false
     }
+
 }
