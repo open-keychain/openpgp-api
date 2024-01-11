@@ -2,20 +2,27 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 28
-
     defaultConfig {
-        versionCode 9
-        versionName '13.1' // API-Version . minor
+        versionCode 10
+        versionName '14.0' // API-Version . minor
         minSdkVersion 9
-        targetSdkVersion 28
+        namespace 'org.openintents.openpgp'
+        if (project.hasProperty('compileSdkVersion')) {
+            compileSdk rootProject.ext.compileSdkVersion
+        } else {
+            compileSdk 28
+        }
     }
 
     lintOptions {
         abortOnError false
     }
+    buildFeatures {
+        aidl true
+    }
 }
 
+/*
 // https://developer.android.com/studio/build/maven-publish-plugin
 afterEvaluate {
     publishing {
@@ -45,3 +52,4 @@ afterEvaluate {
         }
     }
 }
+*/
