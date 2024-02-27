@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.IBinder;
 
 import org.openintents.openpgp.IOpenPgpService2;
@@ -99,8 +100,14 @@ public class OpenPgpServiceConnection {
                 Intent serviceIntent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
                 // NOTE: setPackage is very important to restrict the intent to this provider only!
                 serviceIntent.setPackage(mProviderPackageName);
-                boolean connect = mApplicationContext.bindService(serviceIntent, mServiceConnection,
-                        Context.BIND_AUTO_CREATE);
+                boolean connect;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    connect = mApplicationContext.bindService(serviceIntent, mServiceConnection,
+                            Context.BIND_AUTO_CREATE | Context.BIND_ALLOW_ACTIVITY_STARTS);
+                } else {
+                    connect = mApplicationContext.bindService(serviceIntent, mServiceConnection,
+                            Context.BIND_AUTO_CREATE);
+                }
                 if (!connect) {
                     throw new Exception("bindService() returned false!");
                 }
